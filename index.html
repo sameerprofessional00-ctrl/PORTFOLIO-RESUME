@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sameer — CA Finalist &amp; Automation Builder</title>
+<meta name="description" content="Portfolio of Sameer — CA Finalist, Article Trainee at VCAS &amp; Co LLP, Founder of KWIK. AI-powered tools for GST, Tax, Audit &amp; Tally automation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* ===== Index-page-only styles ===== */
+  .hero-topline{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:12px; text-transform:uppercase; letter-spacing:2px; font-weight:700;
+    color:var(--muted); padding:22px 0; border-bottom:1px solid var(--border); margin-bottom:56px;
+  }
+  .hero{padding:0 0 90px; border-bottom:1px solid var(--border); position:relative;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13px; color:var(--accent); font-weight:600;
+    border:1px solid var(--border); padding:6px 14px; border-radius:100px;
+    margin-bottom:32px;
+  }
+  .eyebrow::before{content:''; width:7px; height:7px; border-radius:50%; background:var(--accent); box-shadow:0 0 8px var(--accent);}
+  h1.display{
+    font-weight:900;
+    font-size:clamp(44px, 8.2vw, 112px);
+    line-height:0.96;
+    letter-spacing:-4px;
+    max-width:1040px;
+  }
+  h1.display em{font-style:normal; color:var(--accent);}
+  .hero-sub{display:grid; grid-template-columns:1.4fr 1fr; gap:60px; margin-top:48px; align-items:end;}
+  .hero-desc{color:var(--muted); font-size:18px; max-width:560px;}
+  .hero-meta{display:flex; flex-direction:column; gap:14px; font-size:14px; border-left:1px solid var(--border); padding-left:28px;}
+  .hero-meta div{display:flex; justify-content:space-between; gap:16px; color:var(--muted);}
+  .hero-meta div b{color:var(--text); font-weight:700; text-align:right;}
+  .hero-actions{display:flex; gap:14px; margin-top:40px; flex-wrap:wrap;}
+  .connect-dongle .gh, .connect-dongle .wa, .connect-dongle .company-link{color:var(--text); transition:.2s;}
+  .connect-dongle .gh:hover, .connect-dongle .wa:hover, .connect-dongle .company-link:hover{color:var(--accent);}
+
+  .about-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:64px; align-items:start;}
+  .about-text p{color:var(--muted); font-size:17px; margin-bottom:20px;}
+  .about-text strong{color:var(--text); font-weight:700;}
+  .about-pull{
+    font-size:clamp(24px,2.8vw,34px); font-weight:800; letter-spacing:-1px; line-height:1.15;
+    border-left:3px solid var(--accent); padding-left:24px; color:var(--text);
+  }
+
+  .stats-band{padding:80px 0;}
+  .stats-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border);}
+  .stats-grid .stat{background:transparent; padding:12px 24px; text-align:center;}
+  .stats-grid .stat b{
+    font-size:clamp(40px,5.5vw,72px); font-weight:900; display:block; letter-spacing:-2px;
+    color:var(--text); line-height:1;
+  }
+  .stats-grid .stat span{font-size:13px; color:var(--muted); display:block; margin-top:12px;}
+
+  .pill-row{display:flex; flex-wrap:wrap; gap:12px;}
+  .pill{border:1px solid var(--border); padding:12px 20px; border-radius:100px; font-size:14px; color:var(--text); background:var(--bg-soft); font-weight:500; transition:.2s;}
+  .pill:hover{border-color:var(--accent); color:var(--accent);}
+  .two-col{display:grid; grid-template-columns:1fr 1fr; gap:64px;}
+  .col-heading{font-weight:800; font-size:19px; margin-bottom:20px; color:var(--muted);}
+
+  .cert-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .cert-card{
+    display:flex; align-items:center; gap:16px;
+    background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px 20px;
+    transition:.2s;
+  }
+  .cert-card:hover{border-color:var(--accent); transform:translateY(-3px); background:var(--card-hover);}
+  .cert-num{
+    width:38px; height:38px; border-radius:11px; flex-shrink:0;
+    background:var(--bg-soft); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:13px; color:var(--accent);
+  }
+  .cert-card b{display:block; font-size:14.5px; font-weight:700; margin-bottom:3px;}
+  .cert-card span{font-size:12px; color:var(--muted);}
+  .cert-go{margin-left:auto; color:var(--muted); font-size:15px; flex-shrink:0;}
+
+  .projects-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:24px;}
+  .project-card{
+    background:var(--card); border:1px solid var(--border); border-radius:20px;
+    padding:32px; display:flex; flex-direction:column; gap:18px;
+    transition:.25s; position:relative; overflow:hidden; height:100%;
+  }
+  .project-card:hover{background:var(--card-hover); border-color:#333c34; transform:translateY(-4px);}
+  a.project-card:hover .card-arrow{opacity:1; transform:translate(0,0);}
+  .project-card.featured{grid-column:span 2; flex-direction:row; align-items:center; gap:40px;}
+  .project-top{display:flex; align-items:center; justify-content:space-between;}
+  .project-icon{width:56px; height:56px; border-radius:14px; flex-shrink:0;}
+  .project-icon svg{width:26px; height:26px;}
+  .tag{font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--accent); border:1px solid var(--border); padding:5px 10px; border-radius:100px; font-weight:700;}
+  .project-card h3{font-size:23px; font-weight:800; letter-spacing:-0.5px;}
+  .project-card p{color:var(--muted); font-size:14.5px;}
+  .project-card .stack{display:flex; flex-wrap:wrap; gap:8px; margin-top:auto;}
+  .stack span{font-size:11px; color:var(--muted); border:1px solid var(--border); padding:4px 10px; border-radius:100px;}
+  .card-arrow{
+    position:absolute; top:28px; right:28px; width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--border); display:flex; align-items:center; justify-content:center;
+    opacity:0; transform:translate(-6px,6px); transition:.25s; font-size:15px; color:var(--accent);
+  }
+  .featured-media{flex:0 0 220px; height:180px; border-radius:16px;}
+  .featured-media svg{width:64px; height:64px;}
+  .featured-body{flex:1;}
+  .featured-body h3{font-size:32px;}
+
+  .exp-edu-grid{display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;}
+  .exp-edu-col-head{
+    display:flex; align-items:center; gap:10px;
+    font-size:12.5px; text-transform:uppercase; letter-spacing:1.5px; font-weight:800; color:var(--accent);
+    margin-bottom:22px;
+  }
+  .exp-edu-col-head svg{width:18px; height:18px; stroke:var(--accent); fill:none; stroke-width:1.8;}
+  .t-item{
+    position:relative; display:block; padding:20px 22px; margin-bottom:14px;
+    background:var(--card); border:1px solid var(--border); border-radius:16px;
+    transition:.2s; overflow:hidden;
+  }
+  .t-item::before{content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--accent);}
+  a.t-item:hover{transform:translateX(5px); border-color:var(--accent); box-shadow:0 10px 26px -16px rgba(35,35,255,0.35);}
+  .t-item .t-date{font-size:11.5px; color:var(--accent); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; font-weight:700;}
+  .t-item h4{font-size:18.5px; font-weight:800; margin-bottom:6px; letter-spacing:-0.4px;}
+  .t-item p{color:var(--muted); font-size:13.5px; max-width:600px;}
+
+  .contact{border-bottom:none; text-align:center; padding:120px 0;}
+  .contact h2{font-weight:900; font-size:clamp(36px,7vw,84px); letter-spacing:-3px; margin-bottom:24px; line-height:1.0;}
+  .contact h2 em{color:var(--accent); font-style:normal;}
+  .contact p{color:var(--muted); max-width:520px; margin:0 auto 40px; font-size:17px;}
+  .contact-links{display:flex; justify-content:center; gap:16px; flex-wrap:wrap;}
+
+  @media (max-width:860px){
+    .hero-topline{flex-direction:column; align-items:flex-start; gap:6px;}
+    .hero-sub{grid-template-columns:1fr;}
+    .hero-meta{border-left:none; border-top:1px solid var(--border); padding-left:0; padding-top:20px;}
+    .about-grid, .two-col{grid-template-columns:1fr; gap:40px;}
+    .projects-grid{grid-template-columns:1fr;}
+    .project-card.featured{grid-column:span 1; flex-direction:column; align-items:flex-start;}
+    .featured-media{flex:none; width:100%;}
+    .hero{padding:0 0 56px;}
+    .stats-grid{grid-template-columns:repeat(2,1fr);}
+    .cert-grid{grid-template-columns:1fr;}
+    .exp-edu-grid{grid-template-columns:1fr; gap:40px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="wrap">
+    <div class="logo">Sameer<span>.</span></div>
+    <div class="navlinks">
+      <a href="#about">About</a>
+      <a href="#work">Work</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="connect-dongle">
+      <span class="cd-label">Connect</span>
+      <a class="mail" href="mailto:sameerprofessional00@gmail.com" title="Email me">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 6-10 7L2 6"></path></svg>
+      </a>
+      <a class="li" href="https://www.linkedin.com/in/sameer-ca-final/" target="_blank" rel="noopener" title="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+      </a>
+      <a class="gh" href="https://github.com/sameerprofessional00-ctrl" target="_blank" rel="noopener" title="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v 3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a class="wa" href="https://wa.me/918171672191" target="_blank" rel="noopener" title="WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004c-1.819 0-3.592.707-4.886 1.988-1.295 1.281-2.009 2.99-2.009 4.795 0 1.141.292 2.261.847 3.233L.82 21.824l3.881-1.041c.944.524 2.002.817 3.081.823h.001c1.817 0 3.591-.707 4.885-1.988 1.294-1.281 2.008-2.99 2.008-4.796 0-1.282-.31-2.505-.903-3.605-1.28-2.394-3.8-3.985-6.76-3.985"/></svg>
+      </a>
+      <span style="color:var(--border); margin:0 8px;">|</span>
+      <a class="company-link" href="https://www.linkedin.com/company/kwikautomation/" target="_blank" rel="noopener" title="KWIK on LinkedIn" style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">KWIK</a>
+      <a class="company-link" href="https://www.linkedin.com/company/vcas-co-llp/" target="_blank" rel="noopener" title="VCAS on LinkedIn" style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">VCAS</a>
+    </div>
+    <button class="burger" id="burger"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<div class="hero-topline">
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%;">
+    <span>Portfolio · 2026</span>
+    <span>Sameer · CA Finalist / Automation Builder</span>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Available for collaborations &amp; freelance builds</div>
+    <h1 class="display">CA Finalist building <em>AI-powered</em> tools that fix broken finance &amp; audit workflows.</h1>
+
+    <div class="hero-sub">
+      <p class="hero-desc reveal">
+        I'm Sameer — a CA Final student at ICAI and Article Trainee at VCAS &amp; Co LLP, Surat.
+        I turn repetitive GST, Tax, Audit and Tally workflows into fast, reliable desktop software —
+        built with the Claude API, Electron and practical accounting know-how. Not side projects — tools my own firm runs on daily.
+      </p>
+      <div class="hero-meta reveal">
+        <div><span>Based in</span><b>Surat, Gujarat, India</b></div>
+        <div><span>Currently</span><b>Article Trainee, VCAS &amp; Co LLP</b></div>
+        <div><span>Founder of</span><b>KWIK</b></div>
+        <div><span>Focus</span><b>AI Agents · RAG · Workflow Automation</b></div>
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <a class="btn primary" href="#work">View my software →</a>
+      <a class="btn ghost" href="mailto:sameerprofessional00@gmail.com">sameerprofessional00@gmail.com</a>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="section-tint">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-label">01 · About</span>
+        <h2 class="sec-title">Where finance meets automation</h2>
+      </div>
+      <p class="sec-note">The CA syllabus is tough — but inefficient, manual workflows make it tougher. So I started building the fix.</p>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>I work across <strong>Statutory Audit, GST and Direct Tax</strong> at VCAS &amp; Co LLP, and I kept hitting the same wall — too much manual work, too little automation. So instead of just complaining about it, I started building.</p>
+        <p>That turned into <strong>AI-powered tools using the Claude API</strong>, Excel automations for CA workflows, and a full desktop suite that firms and students actually use — not portfolio pieces, actual production software with installers, auto-updates and real users.</p>
+        <p>Alongside this, I run e-commerce brands on <strong>Meesho &amp; Flipkart</strong>, handling GST reconciliation, order automation and finance operations end-to-end — which keeps every tool I build grounded in a real, messy, real-world problem.</p>
+      </div>
+      <p class="about-pull reveal">Not for projects.<br>For actual use.</p>
+    </div>
+  </div>
+</section>
+
+<section class="stats-band section-invert bg-blue texture-dots">
+  <div class="wrap">
+    <div class="stats-grid reveal">
+      <div class="stat"><b>7+</b><span>Desktop tools shipped &amp; installed</span></div>
+      <div class="stat"><b>1</b><span>Unified launcher suite (VCAS Suite)</span></div>
+      <div class="stat"><b>10+</b><span>Months as Article Trainee</span></div>
+      <div class="stat"><b>2</b><span>E-commerce brands run end-to-end</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="work" class="texture-dots">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-label">02 · Selected Work</span>
+        <h2 class="sec-title">Software I've built &amp; shipped</h2>
+      </div>
+      <p class="sec-note">Every tool below is a real, installed Windows application. Click any card for the full case study.</p>
+    </div>
+
+    <div class="projects-grid">
+
+      <a class="project-card featured reveal" href="pages/project-vcas-suite.html">
+        <div class="featured-media tex-blue">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
+        </div>
+        <div class="featured-body">
+          <div class="project-top">
+            <span class="tag">Flagship · Electron Desktop App</span>
+          </div>
+          <h3>VCAS Suite</h3>
+          <p>One launcher to install, update and run every VCAS office tool. Auto-detects installed apps, silently installs/updates via a custom update server, and gives the whole firm one place to manage its software stack — no more hunting for installers.</p>
+          <div class="stack">
+            <span>Electron</span><span>Node.js</span><span>NSIS Installer</span><span>Auto-Update Server</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="pages/project-gst-suite.html">
+        <span class="card-arrow">↗</span>
+        <div class="project-icon tex-blue"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><line x1="8" y1="16" x2="16" y2="8"></line><circle cx="8.7" cy="8.7" r="1"></circle><circle cx="15.3" cy="15.3" r="1"></circle></svg></div>
+        <div class="project-top">
+          <span class="tag">GST</span>
+        </div>
+        <h3>VCAS GST Suite</h3>
+        <p>GST reconciliation suite that matches GSTR-2B against purchase registers, flags mismatches, and cuts hours of manual cross-checking down to minutes.</p>
+        <div class="stack"><span>Reconciliation</span><span>GSTR-2B</span></div>
+      </a>
+
+      <a class="project-card reveal" href="pages/project-tds.html">
+        <span class="card-arrow">↗</span>
+        <div class="project-icon tex-blue"><svg viewBox="0 0 24 24"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg></div>
+        <div class="project-top">
+          <span class="tag">Direct Tax</span>
+        </div>
+        <h3>KWIK TDS</h3>
+        <p>Simplifies TDS computation, deduction tracking and return prep — built to keep Article Trainees from re-doing the same TDS math by hand every quarter.</p>
+        <div class="stack"><span>TDS</span><span>Compliance</span></div>
+      </a>
+
+      <a class="project-card reveal" href="pages/project-tally-reco.html">
+        <span class="card-arrow">↗</span>
+        <div class="project-icon tex-blue"><svg viewBox="0 0 24 24"><path d="M8 3 4 7l4 4"></path><path d="M4 7h16"></path><path d="M16 21l4-4-4-4"></path><path d="M20 17H4"></path></svg></div>
+        <div class="project-top">
+          <span class="tag">Audit</span>
+        </div>
+        <h3>VCAS Tally Reco</h3>
+        <p>Reconciles Tally ledgers against bank statements and external records automatically, surfacing only the entries that actually need a human look.</p>
+        <div class="stack"><span>Tally Integration</span><span>Reconciliation</span></div>
+      </a>
+
+      <a class="project-card reveal" href="pages/project-tally-entry-automation.html">
+        <span class="card-arrow">↗</span>
+        <div class="project-icon tex-blue"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div>
+        <div class="project-top">
+          <span class="tag">Automation</span>
+        </div>
+        <h3>VCAS Tally Entry Automation</h3>
+        <p>Reads source data and pushes structured voucher entries straight into Tally — replacing hours of repetitive manual data entry for the firm.</p>
+        <div class="stack"><span>Tally XML/API</span><span>Bulk Entry</span></div>
+      </a>
+
+      <a class="project-card reveal" href="pages/project-ledger-confirm-pro.html">
+        <span class="card-arrow">↗</span>
+        <div class="project-icon tex-blue"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="m9 15 2 2 4-4"></path></svg></div>
+        <div class="project-top">
+          <span class="tag">Audit</span>
+        </div>
+        <h3>Ledger Confirm Pro</h3>
+        <p>Generates and tracks balance confirmation letters for debtors/creditors during statutory audits — from drafting to follow-up in one place.</p>
+        <div class="stack"><span>Audit Confirmations</span><span>Templates</span></div>
+      </a>
+
+      <a class="project-card reveal" href="pages/project-engagement-letter.html">
+        <span class="card-arrow">↗</span>
+        <div class="project-icon tex-blue"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M8 17s1-1 2-1 1.5 1 2.5 1 1.5-1.5 1.5-1.5"></path></svg></div>
+        <div class="project-top">
+          <span class="tag">Practice Management</span>
+        </div>
+        <h3>VCAS Engagement Letter Generator</h3>
+        <p>Auto-generates client engagement letters from a firm-standard template, cutting drafting time from an hour to a couple of minutes per client.</p>
+        <div class="stack"><span>Document Generation</span><span>Templates</span></div>
+      </a>
+
+      <a class="project-card reveal" href="pages/project-salary-tool.html">
+        <span class="card-arrow">↗</span>
+        <div class="project-icon tex-blue"><svg viewBox="0 0 24 24"><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0 0 4h16v3"></path><path d="M3 9v10a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path><path d="M18 13a1.5 1.5 0 0 0 0 3h3v-3Z"></path></svg></div>
+        <div class="project-top">
+          <span class="tag">Payroll</span>
+        </div>
+        <h3>KWIK Salary Tool</h3>
+        <p>Computes salary structures, deductions and payslips for client staff — built under KWIK, my own venture, for fast, error-free payroll runs.</p>
+        <div class="stack"><span>Payroll</span><span>Payslip Generation</span></div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="section-invert bg-dark texture-dots">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-label">03 · Skills &amp; Certifications</span>
+        <h2 class="sec-title">Tools of the trade</h2>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="reveal">
+        <h4 class="col-heading">Top Skills</h4>
+        <div class="pill-row">
+          <span class="pill">Workflow Analysis</span>
+          <span class="pill">AI Agents</span>
+          <span class="pill">Retrieval-Augmented Generation (RAG)</span>
+          <span class="pill">Claude API Integration</span>
+          <span class="pill">Excel Automation</span>
+          <span class="pill">Electron Desktop Apps</span>
+          <span class="pill">GST Compliance &amp; Filing</span>
+          <span class="pill">Statutory Audit</span>
+          <span class="pill">Direct &amp; Indirect Tax</span>
+          <span class="pill">Tally Integration</span>
+        </div>
+      </div>
+      <div class="reveal">
+        <h4 class="col-heading">Certifications — click any for details</h4>
+        <div class="cert-grid" style="grid-template-columns: 1fr 1fr; gap: 14px;">
+          <a class="cert-card" href="pages/cert-icitss.html"><span class="cert-num">01</span><div><b>ICITSS-IT</b><span>ICAI Information Technology</span></div><span class="cert-go">↗</span></a>
+          <a class="cert-card" href="pages/cert-icitss-orientation.html"><span class="cert-num">02</span><div><b>ICITSS-Orientation</b><span>ICAI Orientation Course</span></div><span class="cert-go">↗</span></a>
+          <a class="cert-card" href="pages/cert-goldman-sachs.html"><span class="cert-num">03</span><div><b>Goldman Sachs</b><span>Internal Audit Simulation</span></div><span class="cert-go">↗</span></a>
+          <a class="cert-card" href="pages/cert-copilot-studio.html"><span class="cert-num">04</span><div><b>Microsoft Copilot Studio</b><span>AI Copilots & Agents</span></div><span class="cert-go">↗</span></a>
+          <a class="cert-card" href="pages/cert-google-analytics.html"><span class="cert-num">05</span><div><b>Google Analytics</b><span>Web Analytics Certification</span></div><span class="cert-go">↗</span></a>
+          <a class="cert-card" href="pages/cert-excel-chatgpt.html"><span class="cert-num">06</span><div><b>Prompt Engineering</b><span>GitHub Copilot</span></div><span class="cert-go">↗</span></a>
+          <a class="cert-card" href="pages/cert-generative-ai.html"><span class="cert-num">07</span><div><b>Generative AI Studio</b><span>Google Cloud</span></div><span class="cert-go">↗</span></a>
+          <a class="cert-card" href="pages/cert-be10x.html"><span class="cert-num">08</span><div><b>be10x AI Tools</b><span>AI & ChatGPT Workshop</span></div><span class="cert-go">↗</span></a>
+          <a class="cert-card" href="pages/cert-claude-api.html"><span class="cert-num">09</span><div><b>Claude & Anthropic API</b><span>AI Application Development</span></div><span class="cert-go">↗</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience" class="section-tint-soft">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-label">04 · Experience &amp; Education</span>
+        <h2 class="sec-title">How I got here</h2>
+      </div>
+      <p class="sec-note">Click any entry for the full story.</p>
+    </div>
+
+    <div class="exp-edu-grid">
+      <div class="reveal">
+        <div class="exp-edu-col-head">
+          <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+          Experience
+        </div>
+        <a class="t-item" href="pages/exp-kwik.html">
+          <div class="t-date">Nov 2025 — Present</div>
+          <h4>Founder, KWIK</h4>
+          <p>Building AI-powered tools and automation products for CA firms and finance workflows.</p>
+        </a>
+        <a class="t-item" href="pages/exp-vcas.html">
+          <div class="t-date">Nov 2025 — Present</div>
+          <h4>Article Trainee, VCAS &amp; Co LLP</h4>
+          <p>GST compliance, statutory audit and taxation — plus building the internal VCAS Suite of tools.</p>
+        </a>
+        <a class="t-item" href="pages/exp-goldman-sachs.html">
+          <div class="t-date">Apr — May 2026</div>
+          <h4>Internal Audit Job Simulation, Goldman Sachs</h4>
+          <p>Simulated internal audit engagement — risk assessment, controls testing, audit reporting.</p>
+        </a>
+        <a class="t-item" href="pages/exp-ca-final.html">
+          <div class="t-date">Nov 2025 — Present</div>
+          <h4>CA Final, ICAI</h4>
+          <p>Advanced subjects: SFM, Direct &amp; Indirect Tax Laws, Advanced Auditing, Strategic Cost Management.</p>
+        </a>
+      </div>
+
+      <div class="reveal">
+        <div class="exp-edu-col-head">
+          <svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5Z"></path><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"></path></svg>
+          Education
+        </div>
+        <a class="t-item" href="pages/edu-ca-intermediate.html">
+          <div class="t-date">Cleared</div>
+          <h4>CA Intermediate — ICAI</h4>
+          <p>Both groups cleared under The Institute of Chartered Accountants of India.</p>
+        </a>
+        <a class="t-item" href="pages/edu-ca-foundation.html">
+          <div class="t-date">December 2022</div>
+          <h4>CA Foundation — ICAI</h4>
+          <p>Entry-level CA examination, cleared December 2022.</p>
+        </a>
+        <a class="t-item" href="pages/edu-bcom.html">
+          <div class="t-date">Completed</div>
+          <h4>Bachelor of Commerce (B.Com) — GLA University</h4>
+          <p>Core commerce and accounting foundation alongside CA studies.</p>
+        </a>
+        <a class="t-item" href="pages/edu-hsc.html">
+          <div class="t-date">Completed</div>
+          <h4>Higher Secondary Certificate — Kendriya Vidyalaya</h4>
+          <p>Science stream, before moving into commerce and the CA track.</p>
+        </a>
+        <a class="t-item" href="pages/edu-ssc.html">
+          <div class="t-date">Completed</div>
+          <h4>Secondary School Certificate — Kendriya Vidyalaya</h4>
+          <p>Secondary schooling.</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact section-invert bg-dark">
+  <div class="wrap">
+    <span class="sec-label">05 · Contact</span>
+    <h2>Got a workflow worth <em>automating?</em></h2>
+    <p>Whether you're a CA firm drowning in manual entries, a student who wants smarter tools, or an e-commerce seller who needs GST clarity — let's talk.</p>
+    <div class="contact-links">
+      <a class="btn primary" href="mailto:sameerprofessional00@gmail.com">Email me →</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/sameer-ca-final/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a class="btn ghost" href="https://github.com/sameerprofessional00-ctrl" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn ghost" href="https://wa.me/918171672191" target="_blank" rel="noopener">WhatsApp ↗</a>
+      <a class="btn ghost" href="https://www.linkedin.com/company/kwikautomation/" target="_blank" rel="noopener">KWIK ↗</a>
+      <a class="btn ghost" href="https://www.linkedin.com/company/vcas-co-llp/" target="_blank" rel="noopener">VCAS ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer section-invert bg-dark">
+  <div class="wrap">© 2026 Sameer · CA Finalist · Surat, Gujarat, India</div>
+</footer>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:0.12});
+  revealEls.forEach(el=>io.observe(el));
+
+  const burger = document.getElementById('burger');
+  let open = false;
+  burger.addEventListener('click', ()=>{
+    open = !open;
+    const links = document.querySelector('.navlinks');
+    if(open){
+      links.style.display='flex';
+      links.style.position='fixed';
+      links.style.top='76px';
+      links.style.left='0';
+      links.style.right='0';
+      links.style.background='#0b0d0c';
+      links.style.flexDirection='column';
+      links.style.padding='24px 32px';
+      links.style.borderBottom='1px solid var(--border)';
+      links.style.gap='20px';
+      links.style.zIndex='60';
+    } else {
+      links.removeAttribute('style');
+    }
+  });
+</script>
+
+</body>
+</html>

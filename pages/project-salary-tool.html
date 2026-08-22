@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KWIK Salary Tool — Sameer</title>
+<meta name="description" content="Computes salary structures, deductions and payslips for client staff — built under KWIK for fast, error-free payroll runs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="site-header">
+  <nav class="wrap">
+    <a class="logo" href="../index.html">Sameer<span>.</span></a>
+    <div class="navlinks">
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#work">Work</a>
+      <a href="../index.html#skills">Skills</a>
+      <a href="../index.html#experience">Experience</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+    <div class="connect-dongle">
+        <span class="cd-label">Connect</span>
+        <a class="mail" href="mailto:sameerprofessional00@gmail.com" title="Email me"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 6-10 7L2 6"></path></svg></a>
+        <a class="li" href="https://www.linkedin.com/in/sameer-cafinal" target="_blank" rel="noopener" title="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg></a>
+      </div>
+    <button class="burger" id="burger"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+<section class="detail-hero section-tint" style="border-bottom:none; padding-bottom:0;">
+  <div class="wrap">
+    <a class="back-link" href="../index.html#work">&larr; Back to portfolio</a>
+    <span class="detail-tag">Payroll</span>
+    <h1 class="detail-title">KWIK Salary Tool</h1>
+    <p class="detail-lede">Computes salary structures, deductions and payslips for client staff — built under KWIK for fast, error-free payroll runs.</p>
+    <div class="detail-meta-row">
+      <div><span>Role</span><b>Founder / Developer</b></div>
+      <div><span>Type</span><b>Payroll</b></div>
+      <div><span>Status</span><b>Live, KWIK product</b></div>
+    </div>
+    <div class="detail-banner tex-blue"><svg class="tex-blue-icon-lg" viewBox="0 0 24 24"><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0 0 4h16v3"></path><path d="M3 9v10a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path><path d="M18 13a1.5 1.5 0 0 0 0 3h3v-3Z"></path></svg></div>
+  </div>
+</section>
+
+<section class="detail-body" style="border-bottom:1px solid var(--border);">
+  <div class="wrap" style="display:grid; grid-template-columns:1.6fr 1fr; gap:64px;">
+    <div>
+      <div class="prose reveal">
+        <h3>Overview</h3>
+        <p>Running payroll for client staff involves computing gross-to-net salary, statutory deductions (PF, ESI, PT, TDS on salary) and generating individual payslips every cycle — all of which is easy to get wrong by hand. KWIK Salary Tool handles the full computation and produces clean, accurate payslips in bulk.</p>
+        <p>Another product built under KWIK, aimed at CA firms and small businesses that need reliable payroll without a full HR/payroll system.</p>
+      </div>
+      <div class="reveal">
+        <h3>Key features</h3>
+        <ul class="feature-list">
+          <li>Computes gross-to-net salary with configurable structures</li>
+          <li>Handles statutory deductions (PF, ESI, PT, TDS on salary)</li>
+          <li>Bulk payslip generation for multiple employees</li>
+          <li>Consistent, audit-ready payroll records</li>
+          <li>Built for CA firms running payroll for multiple clients</li>
+        </ul>
+      </div>
+    </div>
+    <div class="side-card reveal">
+      <h4>Tech stack</h4>
+      <div class="stack-tags"><span>Payroll Computation Engine</span><span>Document Generation</span><span>Electron</span></div>
+      <h4>Details</h4>
+      <div class="side-meta">
+        <div><span>Category</span><b>Payroll</b></div>
+        <div><span>Platform</span><b>Windows Desktop</b></div>
+        <div><span>Product line</span><b>KWIK</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="detail-cta section-invert bg-dark">
+  <div class="wrap">
+    <h2>Running payroll manually every month?</h2>
+    <p>Let's talk about getting KWIK Salary Tool set up for you.</p>
+    <div class="detail-cta-actions">
+      <a class="btn primary" href="mailto:sameerprofessional00@gmail.com">Email me →</a>
+      <a class="btn ghost" href="../index.html">Back to portfolio</a>
+    </div>
+  </div>
+</section>
+<footer class="site-footer section-invert bg-dark">
+  <div class="wrap">© 2026 Sameer · CA Finalist · Surat, Gujarat, India</div>
+</footer>
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:0.1});
+  revealEls.forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
