@@ -3,276 +3,552 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin — Sameer's Blog</title>
+<title>Admin — Sameer</title>
 <meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css">
-<script src="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet"></script>
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
 <style>
-  body{background:#0a0c10; color:#fff; min-height:100vh;}
-  .admin-wrap{max-width:900px; margin:0 auto; padding:40px 24px 100px;}
-  .admin-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:36px; flex-wrap:wrap; gap:16px;}
-  .admin-top h1{font-size:26px; font-weight:800; letter-spacing:-0.5px;}
-  .admin-top a{font-size:13px; color:#9aa0c9;}
+  *{box-sizing:border-box; margin:0; padding:0; font-family:'Inter',sans-serif;}
+  body{background:#f6f6fa; color:#0b0d10;}
+  a{text-decoration:none; color:inherit;}
 
-  /* Login screen */
-  #login-screen{max-width:380px; margin:14vh auto; text-align:center;}
+  /* ---- Login ---- */
+  #login-screen{max-width:380px; margin:14vh auto; text-align:center; padding:0 20px;}
   #login-screen h2{font-size:24px; font-weight:800; margin-bottom:8px;}
-  #login-screen p{color:#9aa0c9; font-size:14px; margin-bottom:28px;}
+  #login-screen p{color:#65656f; font-size:14px; margin-bottom:28px;}
   .field{margin-bottom:14px; text-align:left;}
-  .field label{display:block; font-size:12px; color:#9aa0c9; margin-bottom:6px; text-transform:uppercase; letter-spacing:1px;}
-  .field input{
-    width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.18);
-    background:rgba(255,255,255,0.06); color:#fff; font-size:14px; font-family:inherit;
-  }
-  .field input:focus{outline:none; border-color:#7d8bff;}
-  .btn-main{
-    width:100%; padding:13px; border-radius:10px; border:none; background:#7d8bff; color:#0a0c10;
-    font-weight:700; font-size:14px; cursor:pointer; margin-top:6px; transition:.2s;
-  }
-  .btn-main:hover{background:#fff;}
-  #login-error{color:#ff6b6b; font-size:13px; margin-top:12px; min-height:16px;}
+  .field label{display:block; font-size:12px; color:#65656f; margin-bottom:6px; text-transform:uppercase; letter-spacing:1px;}
+  .field input{width:100%; padding:12px 14px; border-radius:10px; border:1px solid #e6e6ec; font-size:14px;}
+  .field input:focus{outline:none; border-color:#2323ff;}
+  .btn-main{width:100%; padding:13px; border-radius:10px; border:none; background:#2323ff; color:#fff; font-weight:700; font-size:14px; cursor:pointer;}
+  .btn-main:hover{background:#1616cc;}
+  #login-error{color:#e33; font-size:13px; margin-top:12px; min-height:16px;}
 
-  /* Dashboard */
-  #dashboard{display:none;}
-  .card-box{background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14); border-radius:16px; padding:24px; margin-bottom:20px;}
-  .field-row{display:grid; gap:14px; margin-bottom:16px;}
-  .field-row input, .field-row select{
-    width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.18);
-    background:rgba(255,255,255,0.06); color:#fff; font-size:14px; font-family:inherit;
+  /* ---- Shell ---- */
+  #app{display:none; min-height:100vh;}
+  .shell{display:grid; grid-template-columns:240px 1fr; min-height:100vh;}
+  .sidebar{background:#0b0d10; color:#fff; padding:24px 0; display:flex; flex-direction:column;}
+  .sidebar .brand{padding:0 24px 24px; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:16px;}
+  .sidebar .brand b{font-size:17px; font-weight:800;}
+  .sidebar .brand span{display:block; font-size:12px; color:#9aa0c9; margin-top:2px;}
+  .nav-item{
+    display:flex; align-items:center; gap:10px; padding:11px 24px; font-size:13.5px; font-weight:600;
+    color:#c4c6de; cursor:pointer; transition:.15s; border-left:3px solid transparent;
   }
-  #editor{background:#fff; color:#111; border-radius:10px; min-height:280px;}
+  .nav-item:hover{background:rgba(255,255,255,0.05); color:#fff;}
+  .nav-item.active{background:rgba(125,139,255,0.12); color:#fff; border-left-color:#7d8bff;}
+  .nav-item .dot{width:6px; height:6px; border-radius:50%; background:#7d8bff;}
+  .sidebar-footer{margin-top:auto; padding:16px 24px 0; border-top:1px solid rgba(255,255,255,0.1);}
+
+  .main{padding:32px 40px; overflow-y:auto;}
+  .view{display:none;}
+  .view.active{display:block;}
+  .view-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; flex-wrap:wrap; gap:14px;}
+  .view-head h1{font-size:26px; font-weight:800; letter-spacing:-0.5px;}
+  .view-head p{color:#65656f; font-size:13.5px; margin-top:4px;}
+  .btn-dark{padding:11px 18px; border-radius:9px; border:none; background:#0b0d10; color:#fff; font-weight:700; font-size:13px; cursor:pointer;}
+  .btn-dark:hover{opacity:.85;}
+  .btn-outline{padding:10px 16px; border-radius:9px; border:1px solid #e6e6ec; background:#fff; color:#0b0d10; font-weight:600; font-size:13px; cursor:pointer;}
+  .btn-outline:hover{border-color:#2323ff; color:#2323ff;}
+
+  /* ---- Dashboard cards ---- */
+  .stat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-bottom:24px;}
+  .stat-card{background:#fff; border:1px solid #e6e6ec; border-radius:16px; padding:22px;}
+  .stat-card .top{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;}
+  .stat-card .top span{font-size:12px; color:#2323ff; font-weight:700; cursor:pointer;}
+  .stat-card b{font-size:36px; font-weight:900; display:block;}
+  .stat-card small{color:#65656f; font-size:13px;}
+  .info-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .info-card{background:#fff; border:1px solid #e6e6ec; border-radius:16px; padding:22px;}
+  .info-card h4{font-size:13px; color:#65656f; text-transform:uppercase; letter-spacing:.5px; margin-bottom:12px;}
+  .info-card .big{font-size:16px; font-weight:800;}
+  .info-card .sub{font-size:12.5px; color:#65656f; margin-top:4px;}
+  .quick-actions{display:flex; gap:12px; margin-top:22px; flex-wrap:wrap;}
+
+  /* ---- Table ---- */
+  .toolbar{display:flex; gap:12px; margin-bottom:18px; flex-wrap:wrap; align-items:center;}
+  .toolbar input[type=text]{flex:1; min-width:220px; padding:11px 14px; border-radius:9px; border:1px solid #e6e6ec; font-size:13.5px;}
+  .filter-btns{display:flex; gap:6px;}
+  .filter-btns button{padding:9px 16px; border-radius:8px; border:1px solid #e6e6ec; background:#fff; font-size:13px; font-weight:600; cursor:pointer;}
+  .filter-btns button.active{background:#0b0d10; color:#fff; border-color:#0b0d10;}
+  table{width:100%; border-collapse:collapse; background:#fff; border-radius:14px; overflow:hidden; border:1px solid #e6e6ec;}
+  th{text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.6px; color:#65656f; padding:14px 16px; border-bottom:1px solid #e6e6ec; background:#fafafe;}
+  td{padding:14px 16px; border-bottom:1px solid #f0f0f4; font-size:13.5px; vertical-align:middle;}
+  tr:last-child td{border-bottom:none;}
+  td b{font-weight:700; display:block;}
+  td .slug{color:#9a9aa5; font-size:11.5px;}
+  .badge{font-size:11px; padding:4px 10px; border-radius:100px; font-weight:700; text-transform:capitalize;}
+  .badge.published{background:#e3f7e9; color:#1a9c4c;}
+  .badge.draft{background:#f0f0f4; color:#65656f;}
+  .row-actions{display:flex; gap:6px;}
+  .row-actions button{width:30px; height:30px; border-radius:7px; border:1px solid #e6e6ec; background:#fff; cursor:pointer; font-size:13px;}
+  .row-actions button:hover{border-color:#2323ff; color:#2323ff;}
+  .row-actions button.danger:hover{border-color:#e33; color:#e33;}
+
+  /* ---- Editor ---- */
+  .editor-grid{display:grid; grid-template-columns:1fr 300px; gap:24px; align-items:start;}
+  .card-box{background:#fff; border:1px solid #e6e6ec; border-radius:16px; padding:24px; margin-bottom:18px;}
+  .field-lbl{font-size:11.5px; text-transform:uppercase; letter-spacing:.6px; color:#65656f; font-weight:700; margin-bottom:7px; display:block;}
+  .card-box input[type=text], .card-box select, .card-box textarea{
+    width:100%; padding:11px 13px; border-radius:9px; border:1px solid #e6e6ec; font-size:13.5px; margin-bottom:16px; font-family:inherit;
+  }
+  .slug-row{display:flex; align-items:center; gap:0; border:1px solid #e6e6ec; border-radius:9px; overflow:hidden; margin-bottom:16px;}
+  .slug-row span{background:#f6f6fa; padding:11px 12px; font-size:12.5px; color:#65656f; white-space:nowrap;}
+  .slug-row input{border:none; border-radius:0; margin-bottom:0;}
+  #editor{background:#fff; min-height:320px; border-radius:0 0 10px 10px;}
   .ql-toolbar{border-radius:10px 10px 0 0;}
-  .ql-container{border-radius:0 0 10px 10px; font-size:15px;}
-  .actions-row{display:flex; gap:12px; margin-top:18px; flex-wrap:wrap;}
-  .btn-sm{padding:11px 20px; border-radius:9px; border:1px solid rgba(255,255,255,0.2); background:transparent; color:#fff; font-weight:600; font-size:13px; cursor:pointer; transition:.2s;}
-  .btn-sm.primary{background:#7d8bff; color:#0a0c10; border-color:#7d8bff;}
-  .btn-sm:hover{opacity:.85;}
-  #status-msg{font-size:13px; margin-top:10px; color:#9aa0c9;}
+  .cover-drop{border:1.5px dashed #e6e6ec; border-radius:12px; padding:16px; text-align:center; cursor:pointer; margin-bottom:10px;}
+  .cover-drop:hover{border-color:#2323ff;}
+  .cover-preview{width:100%; border-radius:10px; margin-top:10px; display:none; max-height:160px; object-fit:cover;}
+  #status-msg{font-size:13px; margin-top:8px; color:#65656f;}
+  .tag-pills{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;}
+  .tag-pill{background:#f0f0f4; padding:5px 10px; border-radius:100px; font-size:12px; display:flex; align-items:center; gap:6px;}
+  .tag-pill button{background:none; border:none; cursor:pointer; font-size:13px; color:#65656f;}
 
-  .post-list-item{
-    display:flex; justify-content:space-between; align-items:center; gap:12px;
-    padding:14px 16px; border-radius:10px; background:rgba(255,255,255,0.04); margin-bottom:10px;
+  /* ---- Enquiries ---- */
+  .enq-row{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; background:#fff; border:1px solid #e6e6ec; border-radius:14px; padding:18px 20px; margin-bottom:12px;}
+  .enq-row.unread{border-left:3px solid #2323ff;}
+  .enq-row b{font-size:14.5px;}
+  .enq-row .meta{font-size:12px; color:#65656f; margin-top:2px;}
+  .enq-row .msg{font-size:13.5px; margin-top:10px; color:#333;}
+  .enq-actions{display:flex; gap:8px; flex-shrink:0;}
+
+  @media (max-width:900px){
+    .shell{grid-template-columns:1fr;}
+    .sidebar{display:none;}
+    .editor-grid, .stat-grid, .info-grid{grid-template-columns:1fr;}
   }
-  .post-list-item b{font-size:14px;}
-  .post-list-item span{font-size:12px; color:#9aa0c9; display:block; margin-top:3px;}
-  .post-list-actions{display:flex; gap:8px; flex-shrink:0;}
-  .post-list-actions button{background:none; border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:7px; padding:6px 10px; font-size:12px; cursor:pointer;}
-  .post-list-actions button:hover{border-color:#7d8bff; color:#7d8bff;}
-  .section-label{font-size:12px; text-transform:uppercase; letter-spacing:1.5px; color:#7d8bff; font-weight:700; margin-bottom:14px;}
-  .cover-preview{width:120px; height:80px; border-radius:8px; object-fit:cover; margin-top:8px; display:none;}
 </style>
 </head>
 <body>
 
-<!-- ===== LOGIN SCREEN ===== -->
+<!-- ===== LOGIN ===== -->
 <div id="login-screen">
   <h2>Admin Login</h2>
-  <p>Sign in to manage blog posts</p>
-  <div class="field">
-    <label>Email</label>
-    <input type="email" id="login-email" placeholder="you@example.com">
-  </div>
-  <div class="field">
-    <label>Password</label>
-    <input type="password" id="login-password" placeholder="••••••••">
-  </div>
+  <p>Sign in to manage your site</p>
+  <div class="field"><label>Email</label><input type="email" id="login-email" placeholder="you@example.com"></div>
+  <div class="field"><label>Password</label><input type="password" id="login-password" placeholder="••••••••"></div>
   <button class="btn-main" id="login-btn">Sign In</button>
   <div id="login-error"></div>
 </div>
 
-<!-- ===== DASHBOARD (shown after login) ===== -->
-<div id="dashboard">
-  <div class="admin-wrap">
-    <div class="admin-top">
-      <h1>Blog Admin</h1>
-      <div style="display:flex; gap:18px; align-items:center;">
-        <a href="../blog/index.html" target="_blank">View blog ↗</a>
-        <a href="#" id="logout-btn">Log out</a>
+<!-- ===== APP SHELL ===== -->
+<div id="app">
+  <div class="shell">
+    <div class="sidebar">
+      <div class="brand"><b>Sameer Admin</b><span id="user-email"></span></div>
+      <div class="nav-item active" data-view="dashboard"><span class="dot"></span> Dashboard</div>
+      <div class="nav-item" data-view="blogs"><span class="dot"></span> Blogs</div>
+      <div class="nav-item" data-view="enquiries"><span class="dot"></span> Contact Enquiries</div>
+      <div class="nav-item" data-view="profile"><span class="dot"></span> Profile &amp; Security</div>
+      <div class="sidebar-footer">
+        <a href="../blog/index.html" target="_blank" style="font-size:13px; color:#9aa0c9; display:block; margin-bottom:10px;">View website ↗</a>
+        <div class="nav-item" id="logout-btn" style="padding-left:0;">Log out</div>
       </div>
     </div>
 
-    <div class="card-box">
-      <div class="section-label" id="form-mode-label">New Post</div>
-      <div class="field-row">
-        <input type="text" id="post-title" placeholder="Post title">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-          <input type="text" id="post-tag" placeholder="Tag (e.g. GST, Tax, Automation)">
-          <select id="post-status">
-            <option value="draft">Draft</option>
-            <option value="published">Published</option>
-          </select>
+    <div class="main">
+
+      <!-- DASHBOARD -->
+      <div class="view active" id="view-dashboard">
+        <div class="view-head">
+          <div><h1>Dashboard</h1><p>Welcome back — here's what's happening.</p></div>
+          <button class="btn-dark" onclick="goToNewBlog()">+ New Blog Post</button>
         </div>
-        <input type="file" id="post-cover" accept="image/*">
-        <img id="cover-preview" class="cover-preview">
+        <div class="stat-grid">
+          <div class="stat-card"><div class="top"><span>Blogs</span><span onclick="switchView('blogs')">View all →</span></div><b id="stat-published">0</b><small>Published Blogs</small></div>
+          <div class="stat-card"><div class="top"><span>Drafts</span><span onclick="switchView('blogs')">View all →</span></div><b id="stat-draft">0</b><small>Draft Blogs</small></div>
+          <div class="stat-card"><div class="top"><span>Enquiries</span><span onclick="switchView('enquiries')">View all →</span></div><b id="stat-unread">0</b><small>Unread Enquiries</small></div>
+        </div>
+        <div class="info-grid">
+          <div class="info-card"><h4>Last Published Blog</h4><div class="big" id="last-blog-title">—</div><div class="sub" id="last-blog-date"></div></div>
+          <div class="info-card"><h4>Last Contact Enquiry</h4><div class="big" id="last-enq-name">—</div><div class="sub" id="last-enq-date"></div></div>
+        </div>
+        <div class="quick-actions">
+          <button class="btn-outline" onclick="goToNewBlog()">+ Create Blog Post</button>
+          <button class="btn-outline" onclick="switchView('enquiries')">View Enquiries</button>
+          <button class="btn-outline" onclick="window.open('../blog/index.html','_blank')">View Website</button>
+        </div>
       </div>
-      <div id="editor"></div>
-      <div class="actions-row">
-        <button class="btn-sm primary" id="save-btn">Save Post</button>
-        <button class="btn-sm" id="clear-btn">Clear / New</button>
-      </div>
-      <div id="status-msg"></div>
-    </div>
 
-    <div class="card-box">
-      <div class="section-label">All Posts</div>
-      <div id="post-list"><p style="color:#9aa0c9; font-size:13px;">Loading…</p></div>
+      <!-- BLOGS LIST -->
+      <div class="view" id="view-blogs">
+        <div class="view-head">
+          <div><h1>Blog Posts</h1><p>Manage your blog articles</p></div>
+          <button class="btn-dark" onclick="goToNewBlog()">+ New Blog Post</button>
+        </div>
+        <div class="toolbar">
+          <input type="text" id="blog-search" placeholder="Search by title…">
+          <div class="filter-btns">
+            <button class="active" data-filter="all">All</button>
+            <button data-filter="published">Published</button>
+            <button data-filter="draft">Draft</button>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody id="blogs-table-body"><tr><td colspan="5" style="color:#9a9aa5;">Loading…</td></tr></tbody>
+        </table>
+      </div>
+
+      <!-- BLOG EDITOR -->
+      <div class="view" id="view-editor">
+        <div class="view-head">
+          <div><h1 id="editor-heading">New Blog Post</h1><p>Fill in the details below</p></div>
+          <div style="display:flex; gap:10px;">
+            <button class="btn-outline" onclick="switchView('blogs')">← Back</button>
+            <button class="btn-outline" id="save-draft-btn">Save Draft</button>
+            <button class="btn-dark" id="publish-btn">Publish</button>
+          </div>
+        </div>
+        <div class="editor-grid">
+          <div>
+            <div class="card-box">
+              <span class="field-lbl">Blog Title *</span>
+              <input type="text" id="post-title" placeholder="Enter your blog title">
+              <span class="field-lbl">URL Slug *</span>
+              <div class="slug-row"><span>/blog/</span><input type="text" id="post-slug" placeholder="url-slug"></div>
+              <span class="field-lbl">Content</span>
+              <div id="editor"></div>
+            </div>
+            <div class="card-box">
+              <span class="field-lbl">SEO — Page Title</span>
+              <input type="text" id="post-meta-title" placeholder="Title for search engines" maxlength="60">
+              <span class="field-lbl">SEO — Description</span>
+              <textarea id="post-meta-desc" rows="3" placeholder="Short description for search engines" maxlength="160"></textarea>
+            </div>
+          </div>
+          <div>
+            <div class="card-box">
+              <span class="field-lbl">Featured Image</span>
+              <div class="cover-drop" onclick="document.getElementById('post-cover').click()">Click to upload image</div>
+              <input type="file" id="post-cover" accept="image/*" style="display:none;">
+              <img id="cover-preview" class="cover-preview">
+            </div>
+            <div class="card-box">
+              <span class="field-lbl">Category</span>
+              <select id="post-category">
+                <option>General</option><option>GST</option><option>Direct Tax</option>
+                <option>Audit</option><option>Automation</option><option>Payroll</option>
+              </select>
+              <span class="field-lbl">Tags</span>
+              <input type="text" id="post-tag-input" placeholder="Type a tag, press Enter">
+              <div class="tag-pills" id="tag-pills"></div>
+              <span class="field-lbl">Author</span>
+              <input type="text" id="post-author" value="Sameer">
+            </div>
+            <div id="status-msg"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENQUIRIES -->
+      <div class="view" id="view-enquiries">
+        <div class="view-head">
+          <div><h1>Contact Enquiries</h1><p>Manage incoming contact form submissions</p></div>
+        </div>
+        <div class="toolbar">
+          <div class="filter-btns">
+            <button class="active" data-efilter="all">All</button>
+            <button data-efilter="unread">Unread</button>
+            <button data-efilter="read">Read</button>
+          </div>
+        </div>
+        <div id="enquiries-list"><p style="color:#9a9aa5;">Loading…</p></div>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="view" id="view-profile">
+        <div class="view-head"><div><h1>Profile &amp; Security</h1><p>Update your login password</p></div></div>
+        <div class="card-box" style="max-width:420px;">
+          <span class="field-lbl">New Password</span>
+          <input type="password" id="new-password" placeholder="Enter new password">
+          <button class="btn-dark" id="update-pw-btn">Update Password</button>
+          <div id="pw-status" style="font-size:13px; margin-top:10px; color:#65656f;"></div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
-<!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../assets/js/supabase-config.js"></script>
-<!-- Quill rich text editor -->
 <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
-
 <script>
   const quill = new Quill('#editor', { theme: 'snow', placeholder: 'Write your post…' });
-  let editingId = null;
-  let coverFile = null;
+  let editingId = null, coverFile = null, tags = [];
+  let allPosts = [], allEnquiries = [];
 
-  // ---- Auth gate ----
-  async function checkAuth() {
-    const { data: { session } } = await sb.auth.getSession();
-    if (session) {
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-      loadPosts();
+  // ---- Auth ----
+  async function checkAuth(){
+    const { data:{ session } } = await sb.auth.getSession();
+    if(session){
+      document.getElementById('login-screen').style.display='none';
+      document.getElementById('app').style.display='block';
+      document.getElementById('user-email').textContent = session.user.email;
+      loadDashboard(); loadBlogs(); loadEnquiries();
     } else {
-      document.getElementById('login-screen').style.display = 'block';
-      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('login-screen').style.display='block';
+      document.getElementById('app').style.display='none';
     }
   }
   checkAuth();
-  sb.auth.onAuthStateChange(() => checkAuth());
+  sb.auth.onAuthStateChange(()=>checkAuth());
 
-  document.getElementById('login-btn').onclick = async () => {
-    const email = document.getElementById('login-email').value.trim();
-    const pw = document.getElementById('login-password').value;
-    document.getElementById('login-error').textContent = '';
-    const { error } = await sb.auth.signInWithPassword({ email, password: pw });
-    if (error) document.getElementById('login-error').textContent = error.message;
+  document.getElementById('login-btn').onclick = async ()=>{
+    const email=document.getElementById('login-email').value.trim();
+    const pw=document.getElementById('login-password').value;
+    document.getElementById('login-error').textContent='';
+    const {error} = await sb.auth.signInWithPassword({email,password:pw});
+    if(error) document.getElementById('login-error').textContent=error.message;
   };
+  document.getElementById('logout-btn').onclick = async ()=>{ await sb.auth.signOut(); };
 
-  document.getElementById('logout-btn').onclick = async (e) => { e.preventDefault(); await sb.auth.signOut(); };
+  // ---- Nav ----
+  document.querySelectorAll('.nav-item[data-view]').forEach(el=>{
+    el.onclick=()=>switchView(el.dataset.view);
+  });
+  function switchView(name){
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.remove('active'));
+    document.getElementById('view-'+name).classList.add('active');
+    const nav = document.querySelector(`.nav-item[data-view="${name}"]`);
+    if(nav) nav.classList.add('active');
+  }
+  function goToNewBlog(){
+    resetEditor();
+    switchView('editor');
+    document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.remove('active'));
+    document.querySelector('.nav-item[data-view="blogs"]').classList.add('active');
+  }
 
-  // ---- Cover image preview ----
-  document.getElementById('post-cover').addEventListener('change', (e) => {
+  // ---- Dashboard ----
+  async function loadDashboard(){
+    const { data: posts } = await sb.from('posts').select('*').order('created_at',{ascending:false});
+    const { data: enq } = await sb.from('enquiries').select('*').order('created_at',{ascending:false});
+    if(posts){
+      document.getElementById('stat-published').textContent = posts.filter(p=>p.status==='published').length;
+      document.getElementById('stat-draft').textContent = posts.filter(p=>p.status==='draft').length;
+      const lastPub = posts.find(p=>p.status==='published');
+      if(lastPub){
+        document.getElementById('last-blog-title').textContent = lastPub.title;
+        document.getElementById('last-blog-date').textContent = 'Published ' + new Date(lastPub.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+      }
+    }
+    if(enq){
+      document.getElementById('stat-unread').textContent = enq.filter(e=>!e.is_read).length;
+      if(enq[0]){
+        document.getElementById('last-enq-name').textContent = enq[0].name;
+        document.getElementById('last-enq-date').textContent = 'Received ' + new Date(enq[0].created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+      }
+    }
+  }
+
+  // ---- Blogs list ----
+  async function loadBlogs(){
+    const { data, error } = await sb.from('posts').select('*').order('created_at',{ascending:false});
+    const tbody = document.getElementById('blogs-table-body');
+    if(error){ tbody.innerHTML = `<tr><td colspan="5" style="color:#e33;">${error.message}</td></tr>`; return; }
+    allPosts = data || [];
+    renderBlogsTable();
+  }
+  function renderBlogsTable(){
+    const tbody = document.getElementById('blogs-table-body');
+    const search = document.getElementById('blog-search').value.toLowerCase();
+    const activeFilter = document.querySelector('.filter-btns button.active')?.dataset.filter || 'all';
+    let rows = allPosts.filter(p=>{
+      if(activeFilter!=='all' && p.status!==activeFilter) return false;
+      if(search && !p.title.toLowerCase().includes(search)) return false;
+      return true;
+    });
+    if(!rows.length){ tbody.innerHTML = '<tr><td colspan="5" style="color:#9a9aa5;">No posts found.</td></tr>'; return; }
+    tbody.innerHTML = rows.map(p=>`
+      <tr>
+        <td><b>${p.title}</b><span class="slug">/blog/${p.slug||''}</span></td>
+        <td>${p.category||'General'}</td>
+        <td><span class="badge ${p.status}">${p.status}</span></td>
+        <td>${new Date(p.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</td>
+        <td><div class="row-actions">
+          <button title="View" onclick="window.open('../blog/post.html?id=${p.id}','_blank')">👁</button>
+          <button title="Edit" onclick="editPost('${p.id}')">✎</button>
+          <button title="Delete" class="danger" onclick="deletePost('${p.id}')">🗑</button>
+        </div></td>
+      </tr>`).join('');
+  }
+  document.getElementById('blog-search').addEventListener('input', renderBlogsTable);
+  document.querySelectorAll('.filter-btns button[data-filter]').forEach(btn=>{
+    btn.onclick=()=>{
+      document.querySelectorAll('.filter-btns button[data-filter]').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active'); renderBlogsTable();
+    };
+  });
+
+  // ---- Editor helpers ----
+  document.getElementById('post-title').addEventListener('input', (e)=>{
+    if(!editingId){
+      document.getElementById('post-slug').value = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+    }
+  });
+  document.getElementById('post-cover').addEventListener('change', e=>{
     coverFile = e.target.files[0];
-    if (coverFile) {
-      const reader = new FileReader();
-      reader.onload = ev => {
-        const img = document.getElementById('cover-preview');
-        img.src = ev.target.result;
-        img.style.display = 'block';
-      };
+    if(coverFile){
+      const reader=new FileReader();
+      reader.onload=ev=>{ const img=document.getElementById('cover-preview'); img.src=ev.target.result; img.style.display='block'; };
       reader.readAsDataURL(coverFile);
     }
   });
-
-  // ---- Save (create or update) post ----
-  document.getElementById('save-btn').onclick = async () => {
-    const title = document.getElementById('post-title').value.trim();
-    const tag = document.getElementById('post-tag').value.trim();
-    const status = document.getElementById('post-status').value;
-    const content = quill.root.innerHTML;
-    const statusMsg = document.getElementById('status-msg');
-
-    if (!title) { statusMsg.textContent = 'Title is required.'; return; }
-    statusMsg.textContent = 'Saving…';
-
-    try {
-      let coverUrl = document.getElementById('cover-preview').dataset.existingUrl || '';
-      if (coverFile) {
-        const path = `${Date.now()}-${coverFile.name}`;
-        const { error: upErr } = await sb.storage.from('blog-covers').upload(path, coverFile);
-        if (upErr) throw upErr;
-        coverUrl = sb.storage.from('blog-covers').getPublicUrl(path).data.publicUrl;
-      }
-
-      const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-      const data = {
-        title, tag, status, content, cover_url: coverUrl, slug,
-        updated_at: new Date().toISOString()
-      };
-
-      if (editingId) {
-        const { error } = await sb.from('posts').update(data).eq('id', editingId);
-        if (error) throw error;
-      } else {
-        const { error } = await sb.from('posts').insert(data);
-        if (error) throw error;
-      }
-
-      statusMsg.textContent = 'Saved ✓';
-      resetForm();
-      loadPosts();
-    } catch (err) {
-      statusMsg.textContent = 'Error: ' + err.message;
+  document.getElementById('post-tag-input').addEventListener('keydown', e=>{
+    if(e.key==='Enter' && e.target.value.trim()){
+      e.preventDefault();
+      tags.push(e.target.value.trim());
+      e.target.value='';
+      renderTags();
     }
+  });
+  function renderTags(){
+    document.getElementById('tag-pills').innerHTML = tags.map((t,i)=>
+      `<span class="tag-pill">${t}<button onclick="removeTag(${i})">×</button></span>`).join('');
+  }
+  function removeTag(i){ tags.splice(i,1); renderTags(); }
+
+  function resetEditor(){
+    editingId=null; coverFile=null; tags=[];
+    document.getElementById('editor-heading').textContent='New Blog Post';
+    document.getElementById('post-title').value='';
+    document.getElementById('post-slug').value='';
+    document.getElementById('post-meta-title').value='';
+    document.getElementById('post-meta-desc').value='';
+    document.getElementById('post-category').value='General';
+    document.getElementById('post-author').value='Sameer';
+    document.getElementById('cover-preview').style.display='none';
+    document.getElementById('cover-preview').removeAttribute('src');
+    document.getElementById('post-cover').value='';
+    quill.root.innerHTML='';
+    document.getElementById('status-msg').textContent='';
+    renderTags();
+  }
+
+  window.editPost = async function(id){
+    const p = allPosts.find(x=>x.id===id);
+    if(!p) return;
+    editingId = p.id;
+    document.getElementById('editor-heading').textContent = 'Editing: ' + p.title;
+    document.getElementById('post-title').value = p.title||'';
+    document.getElementById('post-slug').value = p.slug||'';
+    document.getElementById('post-meta-title').value = p.meta_title||'';
+    document.getElementById('post-meta-desc').value = p.meta_description||'';
+    document.getElementById('post-category').value = p.category||'General';
+    document.getElementById('post-author').value = p.author||'Sameer';
+    quill.root.innerHTML = p.content||'';
+    tags = p.tag ? p.tag.split(',').map(t=>t.trim()).filter(Boolean) : [];
+    renderTags();
+    const img=document.getElementById('cover-preview');
+    if(p.cover_url){ img.src=p.cover_url; img.style.display='block'; img.dataset.existingUrl=p.cover_url; }
+    switchView('editor');
   };
 
-  document.getElementById('clear-btn').onclick = resetForm;
+  window.deletePost = async function(id){
+    if(!confirm('Delete this post permanently?')) return;
+    await sb.from('posts').delete().eq('id', id);
+    loadBlogs(); loadDashboard();
+  };
 
-  function resetForm() {
-    editingId = null;
-    coverFile = null;
-    document.getElementById('post-title').value = '';
-    document.getElementById('post-tag').value = '';
-    document.getElementById('post-status').value = 'draft';
-    document.getElementById('cover-preview').style.display = 'none';
-    document.getElementById('cover-preview').removeAttribute('data-existing-url');
-    document.getElementById('post-cover').value = '';
-    quill.root.innerHTML = '';
-    document.getElementById('form-mode-label').textContent = 'New Post';
+  async function savePost(status){
+    const title = document.getElementById('post-title').value.trim();
+    const slug = document.getElementById('post-slug').value.trim();
+    const statusMsg = document.getElementById('status-msg');
+    if(!title){ statusMsg.textContent='Title is required.'; return; }
+    if(!slug){ statusMsg.textContent='Slug is required.'; return; }
+    statusMsg.textContent='Saving…';
+    try{
+      let coverUrl = document.getElementById('cover-preview').dataset.existingUrl || '';
+      if(coverFile){
+        const path = `${Date.now()}-${coverFile.name}`;
+        const { error: upErr } = await sb.storage.from('blog-covers').upload(path, coverFile);
+        if(upErr) throw upErr;
+        coverUrl = sb.storage.from('blog-covers').getPublicUrl(path).data.publicUrl;
+      }
+      const data = {
+        title, slug, status,
+        content: quill.root.innerHTML,
+        cover_url: coverUrl,
+        category: document.getElementById('post-category').value,
+        author: document.getElementById('post-author').value,
+        tag: tags.join(', '),
+        meta_title: document.getElementById('post-meta-title').value,
+        meta_description: document.getElementById('post-meta-desc').value,
+        updated_at: new Date().toISOString()
+      };
+      if(editingId){
+        const {error} = await sb.from('posts').update(data).eq('id', editingId);
+        if(error) throw error;
+      } else {
+        const {error} = await sb.from('posts').insert(data);
+        if(error) throw error;
+      }
+      statusMsg.textContent = status==='published' ? 'Published ✓' : 'Saved as draft ✓';
+      await loadBlogs(); await loadDashboard();
+      setTimeout(()=>switchView('blogs'), 600);
+    }catch(err){ statusMsg.textContent='Error: '+err.message; }
   }
+  document.getElementById('save-draft-btn').onclick = ()=>savePost('draft');
+  document.getElementById('publish-btn').onclick = ()=>savePost('published');
 
-  // ---- Load + list posts ----
-  async function loadPosts() {
-    const list = document.getElementById('post-list');
-    const { data: posts, error } = await sb.from('posts').select('*').order('created_at', { ascending: false });
-    if (error) { list.innerHTML = `<p style="color:#ff6b6b; font-size:13px;">${error.message}</p>`; return; }
-    if (!posts.length) { list.innerHTML = '<p style="color:#9aa0c9; font-size:13px;">No posts yet.</p>'; return; }
-    list.innerHTML = '';
-    posts.forEach(p => {
-      const div = document.createElement('div');
-      div.className = 'post-list-item';
-      div.innerHTML = `
+  // ---- Enquiries ----
+  async function loadEnquiries(){
+    const { data, error } = await sb.from('enquiries').select('*').order('created_at',{ascending:false});
+    const list = document.getElementById('enquiries-list');
+    if(error){ list.innerHTML = `<p style="color:#e33;">${error.message}</p>`; return; }
+    allEnquiries = data || [];
+    renderEnquiries();
+  }
+  function renderEnquiries(){
+    const list = document.getElementById('enquiries-list');
+    const activeFilter = document.querySelector('.filter-btns button[data-efilter].active')?.dataset.efilter || 'all';
+    let rows = allEnquiries.filter(e=>{
+      if(activeFilter==='unread') return !e.is_read;
+      if(activeFilter==='read') return e.is_read;
+      return true;
+    });
+    if(!rows.length){ list.innerHTML = '<p style="color:#9a9aa5;">No enquiries.</p>'; return; }
+    list.innerHTML = rows.map(e=>`
+      <div class="enq-row ${e.is_read?'':'unread'}">
         <div>
-          <b>${p.title}</b>
-          <span>${p.tag || 'No tag'} · ${p.status}</span>
+          <b>${e.name}</b>
+          <div class="meta">${e.email} · ${e.subject||'General'} · ${new Date(e.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</div>
+          <div class="msg">${e.message||''}</div>
         </div>
-        <div class="post-list-actions">
-          <button data-id="${p.id}" class="edit-btn">Edit</button>
-          <button data-id="${p.id}" class="del-btn">Delete</button>
-        </div>`;
-      list.appendChild(div);
-    });
-
-    list.querySelectorAll('.edit-btn').forEach(btn => {
-      btn.onclick = async () => {
-        const { data: p } = await sb.from('posts').select('*').eq('id', btn.dataset.id).single();
-        editingId = p.id;
-        document.getElementById('post-title').value = p.title || '';
-        document.getElementById('post-tag').value = p.tag || '';
-        document.getElementById('post-status').value = p.status || 'draft';
-        quill.root.innerHTML = p.content || '';
-        const img = document.getElementById('cover-preview');
-        if (p.cover_url) { img.src = p.cover_url; img.style.display = 'block'; img.dataset.existingUrl = p.cover_url; }
-        document.getElementById('form-mode-label').textContent = 'Editing: ' + p.title;
-        window.scrollTo({top:0, behavior:'smooth'});
-      };
-    });
-    list.querySelectorAll('.del-btn').forEach(btn => {
-      btn.onclick = async () => {
-        if (confirm('Delete this post permanently?')) {
-          await sb.from('posts').delete().eq('id', btn.dataset.id);
-          loadPosts();
-        }
-      };
-    });
+        <div class="enq-actions">
+          <button class="row-actions" style="border:1px solid #e6e6ec; border-radius:7px; padding:6px 10px; background:#fff; cursor:pointer; font-size:12px;" onclick="toggleRead('${e.id}', ${e.is_read})">${e.is_read?'Mark unread':'Mark read'}</button>
+          <button style="border:1px solid #e6e6ec; border-radius:7px; padding:6px 10px; background:#fff; cursor:pointer; font-size:12px;" onclick="deleteEnquiry('${e.id}')">Delete</button>
+        </div>
+      </div>`).join('');
   }
+  document.querySelectorAll('.filter-btns button[data-efilter]').forEach(btn=>{
+    btn.onclick=()=>{
+      document.querySelectorAll('.filter-btns button[data-efilter]').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active'); renderEnquiries();
+    };
+  });
+  window.toggleRead = async function(id, current){
+    await sb.from('enquiries').update({is_read: !current}).eq('id', id);
+    loadEnquiries(); loadDashboard();
+  };
+  window.deleteEnquiry = async function(id){
+    if(!confirm('Delete this enquiry?')) return;
+    await sb.from('enquiries').delete().eq('id', id);
+    loadEnquiries(); loadDashboard();
+  };
+
+  // ---- Profile / password ----
+  document.getElementById('update-pw-btn').onclick = async ()=>{
+    const pw = document.getElementById('new-password').value;
+    const statusEl = document.getElementById('pw-status');
+    if(!pw || pw.length<6){ statusEl.textContent='Password must be at least 6 characters.'; return; }
+    const { error } = await sb.auth.updateUser({ password: pw });
+    statusEl.textContent = error ? 'Error: '+error.message : 'Password updated ✓';
+  };
 </script>
 </body>
 </html>
