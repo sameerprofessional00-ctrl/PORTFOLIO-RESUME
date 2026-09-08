@@ -32,6 +32,18 @@
     max-width:1040px;
   }
   h1.display em{font-style:normal; color:var(--accent);}
+  .hero-photo-wrap{
+    position:absolute; top:0; right:0; width:180px; height:180px;
+    border-radius:28px; overflow:hidden; border:1px solid var(--border);
+    background:linear-gradient(135deg, var(--bg-soft), var(--card));
+    opacity:0; transform:translateY(-16px) scale(.94);
+    animation:heroPhotoIn .9s .25s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  .hero-photo-wrap img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s cubic-bezier(.16,1,.3,1);}
+  .hero-photo-wrap:hover img{transform:scale(1.08) rotate(1deg);}
+  @keyframes heroPhotoIn{to{opacity:1; transform:translateY(0) scale(1);}}
+  @media (max-width:860px){ .hero-photo-wrap{position:static; margin-bottom:28px; width:120px; height:120px;} }
+
   .hero-sub{display:grid; grid-template-columns:1.4fr 1fr; gap:60px; margin-top:48px; align-items:end;}
   .hero-desc{color:var(--muted); font-size:18px; max-width:560px;}
   .hero-meta{display:flex; flex-direction:column; gap:14px; font-size:14px; border-left:1px solid var(--border); padding-left:28px;}
@@ -48,6 +60,19 @@
     font-size:clamp(24px,2.8vw,34px); font-weight:800; letter-spacing:-1px; line-height:1.15;
     border-left:3px solid var(--accent); padding-left:24px; color:var(--text);
   }
+  .about-photo{
+    width:100%; aspect-ratio:4/5; border-radius:20px; overflow:hidden;
+    border:1px solid var(--border); background:var(--bg-soft); margin-bottom:28px;
+  }
+  .about-photo img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .7s cubic-bezier(.16,1,.3,1), filter .5s;}
+  .about-photo:hover img{transform:scale(1.06);}
+
+  .featured-media{position:relative;}
+  .featured-media img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    transition:transform .6s cubic-bezier(.16,1,.3,1);
+  }
+  .project-card.featured:hover .featured-media img{transform:scale(1.08);}
 
   .stats-band{padding:80px 0;}
   .stats-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border);}
@@ -157,6 +182,7 @@
       <a href="#work">Work</a>
       <a href="#skills">Skills</a>
       <a href="#experience">Experience</a>
+      <a href="blog/index.html">Blog</a>
       <a href="#contact">Contact</a>
     </div>
     <div class="connect-dongle">
@@ -189,7 +215,11 @@
 </div>
 
 <section class="hero">
-  <div class="wrap">
+  <div class="wrap" style="position:relative;">
+    <!-- 📸 Put your photo at assets/images/profile.jpg (square-ish, ~600x600) -->
+    <div class="hero-photo-wrap">
+      <img src="assets/images/profile.jpg" alt="Sameer" onerror="this.parentElement.style.display='none'">
+    </div>
     <div class="eyebrow">Available for collaborations &amp; freelance builds</div>
     <h1 class="display">CA Finalist building <em>AI-powered</em> tools that fix broken finance &amp; audit workflows.</h1>
 
@@ -230,7 +260,13 @@
         <p>That turned into <strong>AI-powered tools using the Claude API</strong>, Excel automations for CA workflows, and a full desktop suite that firms and students actually use — not portfolio pieces, actual production software with installers, auto-updates and real users.</p>
         <p>Alongside this, I run e-commerce brands on <strong>Meesho &amp; Flipkart</strong>, handling GST reconciliation, order automation and finance operations end-to-end — which keeps every tool I build grounded in a real, messy, real-world problem.</p>
       </div>
-      <p class="about-pull reveal">Not for projects.<br>For actual use.</p>
+      <div class="reveal">
+        <!-- 📸 Put a workspace/office photo at assets/images/about.jpg -->
+        <div class="about-photo">
+          <img src="assets/images/about.jpg" alt="Sameer at work" onerror="this.parentElement.style.display='none'">
+        </div>
+        <p class="about-pull">Not for projects.<br>For actual use.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -260,6 +296,8 @@
 
       <a class="project-card featured reveal" href="pages/project-vcas-suite.html">
         <div class="featured-media tex-blue">
+          <!-- 📸 Put an app screenshot at assets/images/vcas-suite.jpg to replace this icon -->
+          <img src="assets/images/vcas-suite.jpg" alt="VCAS Suite screenshot" onerror="this.remove()">
           <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
         </div>
         <div class="featured-body">
