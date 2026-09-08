@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Sameer's Blog</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<script src="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet"></script>
+<style>
+  body{background:#0a0c10; color:#fff; min-height:100vh;}
+  .admin-wrap{max-width:900px; margin:0 auto; padding:40px 24px 100px;}
+  .admin-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:36px; flex-wrap:wrap; gap:16px;}
+  .admin-top h1{font-size:26px; font-weight:800; letter-spacing:-0.5px;}
+  .admin-top a{font-size:13px; color:#9aa0c9;}
+
+  /* Login screen */
+  #login-screen{max-width:380px; margin:14vh auto; text-align:center;}
+  #login-screen h2{font-size:24px; font-weight:800; margin-bottom:8px;}
+  #login-screen p{color:#9aa0c9; font-size:14px; margin-bottom:28px;}
+  .field{margin-bottom:14px; text-align:left;}
+  .field label{display:block; font-size:12px; color:#9aa0c9; margin-bottom:6px; text-transform:uppercase; letter-spacing:1px;}
+  .field input{
+    width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.18);
+    background:rgba(255,255,255,0.06); color:#fff; font-size:14px; font-family:inherit;
+  }
+  .field input:focus{outline:none; border-color:#7d8bff;}
+  .btn-main{
+    width:100%; padding:13px; border-radius:10px; border:none; background:#7d8bff; color:#0a0c10;
+    font-weight:700; font-size:14px; cursor:pointer; margin-top:6px; transition:.2s;
+  }
+  .btn-main:hover{background:#fff;}
+  #login-error{color:#ff6b6b; font-size:13px; margin-top:12px; min-height:16px;}
+
+  /* Dashboard */
+  #dashboard{display:none;}
+  .card-box{background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14); border-radius:16px; padding:24px; margin-bottom:20px;}
+  .field-row{display:grid; gap:14px; margin-bottom:16px;}
+  .field-row input, .field-row select{
+    width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.18);
+    background:rgba(255,255,255,0.06); color:#fff; font-size:14px; font-family:inherit;
+  }
+  #editor{background:#fff; color:#111; border-radius:10px; min-height:280px;}
+  .ql-toolbar{border-radius:10px 10px 0 0;}
+  .ql-container{border-radius:0 0 10px 10px; font-size:15px;}
+  .actions-row{display:flex; gap:12px; margin-top:18px; flex-wrap:wrap;}
+  .btn-sm{padding:11px 20px; border-radius:9px; border:1px solid rgba(255,255,255,0.2); background:transparent; color:#fff; font-weight:600; font-size:13px; cursor:pointer; transition:.2s;}
+  .btn-sm.primary{background:#7d8bff; color:#0a0c10; border-color:#7d8bff;}
+  .btn-sm:hover{opacity:.85;}
+  #status-msg{font-size:13px; margin-top:10px; color:#9aa0c9;}
+
+  .post-list-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:14px 16px; border-radius:10px; background:rgba(255,255,255,0.04); margin-bottom:10px;
+  }
+  .post-list-item b{font-size:14px;}
+  .post-list-item span{font-size:12px; color:#9aa0c9; display:block; margin-top:3px;}
+  .post-list-actions{display:flex; gap:8px; flex-shrink:0;}
+  .post-list-actions button{background:none; border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:7px; padding:6px 10px; font-size:12px; cursor:pointer;}
+  .post-list-actions button:hover{border-color:#7d8bff; color:#7d8bff;}
+  .section-label{font-size:12px; text-transform:uppercase; letter-spacing:1.5px; color:#7d8bff; font-weight:700; margin-bottom:14px;}
+  .cover-preview{width:120px; height:80px; border-radius:8px; object-fit:cover; margin-top:8px; display:none;}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div id="login-screen">
+  <h2>Admin Login</h2>
+  <p>Sign in to manage blog posts</p>
+  <div class="field">
+    <label>Email</label>
+    <input type="email" id="login-email" placeholder="you@example.com">
+  </div>
+  <div class="field">
+    <label>Password</label>
+    <input type="password" id="login-password" placeholder="••••••••">
+  </div>
+  <button class="btn-main" id="login-btn">Sign In</button>
+  <div id="login-error"></div>
+</div>
+
+<!-- ===== DASHBOARD (shown after login) ===== -->
+<div id="dashboard">
+  <div class="admin-wrap">
+    <div class="admin-top">
+      <h1>Blog Admin</h1>
+      <div style="display:flex; gap:18px; align-items:center;">
+        <a href="../blog/index.html" target="_blank">View blog ↗</a>
+        <a href="#" id="logout-btn">Log out</a>
+      </div>
+    </div>
+
+    <div class="card-box">
+      <div class="section-label" id="form-mode-label">New Post</div>
+      <div class="field-row">
+        <input type="text" id="post-title" placeholder="Post title">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <input type="text" id="post-tag" placeholder="Tag (e.g. GST, Tax, Automation)">
+          <select id="post-status">
+            <option value="draft">Draft</option>
+            <option value="published">Published</option>
+          </select>
+        </div>
+        <input type="file" id="post-cover" accept="image/*">
+        <img id="cover-preview" class="cover-preview">
+      </div>
+      <div id="editor"></div>
+      <div class="actions-row">
+        <button class="btn-sm primary" id="save-btn">Save Post</button>
+        <button class="btn-sm" id="clear-btn">Clear / New</button>
+      </div>
+      <div id="status-msg"></div>
+    </div>
+
+    <div class="card-box">
+      <div class="section-label">All Posts</div>
+      <div id="post-list"><p style="color:#9aa0c9; font-size:13px;">Loading…</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<!-- Quill rich text editor -->
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+
+<script>
+  const quill = new Quill('#editor', { theme: 'snow', placeholder: 'Write your post…' });
+  let editingId = null;
+  let coverFile = null;
+
+  // ---- Auth gate ----
+  async function checkAuth() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadPosts();
+    } else {
+      document.getElementById('login-screen').style.display = 'block';
+      document.getElementById('dashboard').style.display = 'none';
+    }
+  }
+  checkAuth();
+  sb.auth.onAuthStateChange(() => checkAuth());
+
+  document.getElementById('login-btn').onclick = async () => {
+    const email = document.getElementById('login-email').value.trim();
+    const pw = document.getElementById('login-password').value;
+    document.getElementById('login-error').textContent = '';
+    const { error } = await sb.auth.signInWithPassword({ email, password: pw });
+    if (error) document.getElementById('login-error').textContent = error.message;
+  };
+
+  document.getElementById('logout-btn').onclick = async (e) => { e.preventDefault(); await sb.auth.signOut(); };
+
+  // ---- Cover image preview ----
+  document.getElementById('post-cover').addEventListener('change', (e) => {
+    coverFile = e.target.files[0];
+    if (coverFile) {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const img = document.getElementById('cover-preview');
+        img.src = ev.target.result;
+        img.style.display = 'block';
+      };
+      reader.readAsDataURL(coverFile);
+    }
+  });
+
+  // ---- Save (create or update) post ----
+  document.getElementById('save-btn').onclick = async () => {
+    const title = document.getElementById('post-title').value.trim();
+    const tag = document.getElementById('post-tag').value.trim();
+    const status = document.getElementById('post-status').value;
+    const content = quill.root.innerHTML;
+    const statusMsg = document.getElementById('status-msg');
+
+    if (!title) { statusMsg.textContent = 'Title is required.'; return; }
+    statusMsg.textContent = 'Saving…';
+
+    try {
+      let coverUrl = document.getElementById('cover-preview').dataset.existingUrl || '';
+      if (coverFile) {
+        const path = `${Date.now()}-${coverFile.name}`;
+        const { error: upErr } = await sb.storage.from('blog-covers').upload(path, coverFile);
+        if (upErr) throw upErr;
+        coverUrl = sb.storage.from('blog-covers').getPublicUrl(path).data.publicUrl;
+      }
+
+      const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const data = {
+        title, tag, status, content, cover_url: coverUrl, slug,
+        updated_at: new Date().toISOString()
+      };
+
+      if (editingId) {
+        const { error } = await sb.from('posts').update(data).eq('id', editingId);
+        if (error) throw error;
+      } else {
+        const { error } = await sb.from('posts').insert(data);
+        if (error) throw error;
+      }
+
+      statusMsg.textContent = 'Saved ✓';
+      resetForm();
+      loadPosts();
+    } catch (err) {
+      statusMsg.textContent = 'Error: ' + err.message;
+    }
+  };
+
+  document.getElementById('clear-btn').onclick = resetForm;
+
+  function resetForm() {
+    editingId = null;
+    coverFile = null;
+    document.getElementById('post-title').value = '';
+    document.getElementById('post-tag').value = '';
+    document.getElementById('post-status').value = 'draft';
+    document.getElementById('cover-preview').style.display = 'none';
+    document.getElementById('cover-preview').removeAttribute('data-existing-url');
+    document.getElementById('post-cover').value = '';
+    quill.root.innerHTML = '';
+    document.getElementById('form-mode-label').textContent = 'New Post';
+  }
+
+  // ---- Load + list posts ----
+  async function loadPosts() {
+    const list = document.getElementById('post-list');
+    const { data: posts, error } = await sb.from('posts').select('*').order('created_at', { ascending: false });
+    if (error) { list.innerHTML = `<p style="color:#ff6b6b; font-size:13px;">${error.message}</p>`; return; }
+    if (!posts.length) { list.innerHTML = '<p style="color:#9aa0c9; font-size:13px;">No posts yet.</p>'; return; }
+    list.innerHTML = '';
+    posts.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'post-list-item';
+      div.innerHTML = `
+        <div>
+          <b>${p.title}</b>
+          <span>${p.tag || 'No tag'} · ${p.status}</span>
+        </div>
+        <div class="post-list-actions">
+          <button data-id="${p.id}" class="edit-btn">Edit</button>
+          <button data-id="${p.id}" class="del-btn">Delete</button>
+        </div>`;
+      list.appendChild(div);
+    });
+
+    list.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.onclick = async () => {
+        const { data: p } = await sb.from('posts').select('*').eq('id', btn.dataset.id).single();
+        editingId = p.id;
+        document.getElementById('post-title').value = p.title || '';
+        document.getElementById('post-tag').value = p.tag || '';
+        document.getElementById('post-status').value = p.status || 'draft';
+        quill.root.innerHTML = p.content || '';
+        const img = document.getElementById('cover-preview');
+        if (p.cover_url) { img.src = p.cover_url; img.style.display = 'block'; img.dataset.existingUrl = p.cover_url; }
+        document.getElementById('form-mode-label').textContent = 'Editing: ' + p.title;
+        window.scrollTo({top:0, behavior:'smooth'});
+      };
+    });
+    list.querySelectorAll('.del-btn').forEach(btn => {
+      btn.onclick = async () => {
+        if (confirm('Delete this post permanently?')) {
+          await sb.from('posts').delete().eq('id', btn.dataset.id);
+          loadPosts();
+        }
+      };
+    });
+  }
+</script>
+</body>
+</html>

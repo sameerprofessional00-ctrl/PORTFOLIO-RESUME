@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">Post — Sameer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .post-hero{padding:60px 0 20px;}
+  .post-hero .tag{font-size:12px; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent); font-weight:700;}
+  .post-hero h1{font-size:clamp(30px,5.5vw,48px); font-weight:900; letter-spacing:-1.5px; margin:14px 0;}
+  .post-hero .date{color:var(--muted); font-size:13px;}
+  .post-cover{width:100%; aspect-ratio:16/8; object-fit:cover; border-radius:18px; margin:30px 0; opacity:0; animation:fadeUp .7s forwards;}
+  @keyframes fadeUp{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);}}
+  .post-body{max-width:760px; margin:0 auto; padding:20px 0 80px; font-size:17px; line-height:1.8; color:var(--text);}
+  .post-body img{border-radius:12px; margin:20px 0;}
+  .post-body h2, .post-body h3{margin:32px 0 14px; font-weight:800; letter-spacing:-0.5px;}
+  .post-body p{margin-bottom:16px; color:var(--text);}
+  .post-body a{color:var(--accent); text-decoration:underline;}
+  .back-link{display:inline-block; margin-bottom:20px; font-size:13px; color:var(--muted);}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="wrap">
+    <a href="../index.html" class="logo">Sameer<span>.</span></a>
+    <div class="navlinks">
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#work">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+  </nav>
+</header>
+
+<section class="post-hero">
+  <div class="wrap" style="max-width:760px; margin:0 auto;">
+    <a class="back-link" href="index.html">← Back to blog</a>
+    <div id="post-content"><p style="color:var(--muted);">Loading…</p></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">© 2026 Sameer · CA Finalist · Surat, Gujarat, India</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  const container = document.getElementById('post-content');
+
+  if (!id) {
+    container.innerHTML = '<p>No post specified.</p>';
+  } else {
+    sb.from('posts').select('*').eq('id', id).single().then(({ data: p, error }) => {
+      if (error || !p || p.status !== 'published') {
+        container.innerHTML = '<p>Post not found.</p>';
+        return;
+      }
+      document.getElementById('page-title').textContent = p.title + ' — Sameer';
+      const date = p.created_at ? new Date(p.created_at).toLocaleDateString('en-IN', {day:'numeric', month:'long', year:'numeric'}) : '';
+      container.innerHTML = `
+        <span class="tag">${p.tag || 'General'}</span>
+        <h1>${p.title}</h1>
+        <span class="date">${date}</span>
+        ${p.cover_url ? `<img class="post-cover" src="${p.cover_url}" alt="${p.title}">` : ''}
+        <div class="post-body">${p.content}</div>
+      `;
+    });
+  }
+</script>
+</body>
+</html>

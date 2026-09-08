@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Sameer</title>
+<meta name="description" content="Articles on GST, Tax, Audit and AI-powered automation for finance workflows.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .blog-hero{padding:70px 0 50px; border-bottom:1px solid var(--border);}
+  .blog-hero h1{font-size:clamp(36px,6vw,60px); font-weight:900; letter-spacing:-2px;}
+  .blog-hero p{color:var(--muted); margin-top:14px; font-size:16px;}
+  .blog-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px; padding:60px 0;}
+  .blog-card{
+    background:var(--card); border:1px solid var(--border); border-radius:18px; overflow:hidden;
+    display:flex; flex-direction:column; transition:.25s; opacity:0; transform:translateY(16px);
+    animation:cardIn .6s forwards;
+  }
+  .blog-card:hover{transform:translateY(-4px); border-color:var(--accent);}
+  @keyframes cardIn{to{opacity:1; transform:translateY(0);}}
+  .blog-card .cover{width:100%; aspect-ratio:16/10; background:var(--bg-soft); overflow:hidden;}
+  .blog-card .cover img{width:100%; height:100%; object-fit:cover; transition:transform .5s;}
+  .blog-card:hover .cover img{transform:scale(1.06);}
+  .blog-card .body{padding:20px 22px; flex:1; display:flex; flex-direction:column;}
+  .blog-card .tag{font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--accent); font-weight:700; margin-bottom:10px;}
+  .blog-card h3{font-size:19px; font-weight:800; letter-spacing:-0.4px; margin-bottom:8px;}
+  .blog-card .excerpt{color:var(--muted); font-size:13.5px; flex:1;}
+  .blog-card .date{font-size:12px; color:var(--muted); margin-top:14px;}
+  @media (max-width:860px){ .blog-grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="wrap">
+    <a href="../index.html" class="logo">Sameer<span>.</span></a>
+    <div class="navlinks">
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#work">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+  </nav>
+</header>
+
+<section class="blog-hero">
+  <div class="wrap">
+    <h1>Blog</h1>
+    <p>Notes on GST, Tax, Audit and building AI-powered automation for CA workflows.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="blog-grid" id="blog-grid">
+      <p style="color:var(--muted);">Loading posts…</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">© 2026 Sameer · CA Finalist · Surat, Gujarat, India</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script>
+  sb.from('posts').select('*').eq('status', 'published').order('created_at', { ascending: false })
+    .then(({ data: posts, error }) => {
+      const grid = document.getElementById('blog-grid');
+      if (error) { grid.innerHTML = `<p style="color:#e33;">Couldn't load posts: ${error.message}</p>`; return; }
+      if (!posts.length) { grid.innerHTML = '<p style="color:var(--muted);">No posts published yet. Check back soon.</p>'; return; }
+      grid.innerHTML = '';
+      let i = 0;
+      posts.forEach(p => {
+        const date = p.created_at ? new Date(p.created_at).toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'}) : '';
+        const excerpt = (p.content || '').replace(/<[^>]+>/g, '').slice(0, 110) + '…';
+        const card = document.createElement('a');
+        card.href = `post.html?id=${p.id}`;
+        card.className = 'blog-card';
+        card.style.animationDelay = (i++ * 0.08) + 's';
+        card.innerHTML = `
+          <div class="cover">${p.cover_url ? `<img src="${p.cover_url}" alt="${p.title}">` : ''}</div>
+          <div class="body">
+            <span class="tag">${p.tag || 'General'}</span>
+            <h3>${p.title}</h3>
+            <p class="excerpt">${excerpt}</p>
+            <span class="date">${date}</span>
+          </div>`;
+        grid.appendChild(card);
+      });
+    });
+</script>
+</body>
+</html>
