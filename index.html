@@ -561,6 +561,68 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/supabase-config.js"></script>
 <script>
+  // ---- Dynamic content from admin panel (falls back to static HTML if no data) ----
+  async function loadDynamicContent(){
+    try{
+      const [{data:projects}, {data:skills}, {data:timeline}, {data:contact}] = await Promise.all([
+        sb.from('site_projects').select('*').order('order_num'),
+        sb.from('site_skills').select('*').order('order_num'),
+        sb.from('site_timeline').select('*').order('order_num'),
+        sb.from('site_contact').select('*').eq('id',1).single()
+      ]);
+
+      if(projects && projects.length){
+        const grid = document.querySelector('.projects-grid');
+        grid.innerHTML = projects.map(p=>{
+          const stackHtml = (p.stack||'').split(',').filter(Boolean).map(s=>`<span>${s.trim()}</span>`).join('');
+          const cls = 'project-card reveal in' + (p.featured?' featured':'');
+          return `<a class="${cls}" href="${p.link||'#'}">
+            <span class="card-arrow">↗</span>
+            <div class="project-top"><span class="tag">${p.tag||'Project'}</span></div>
+            <h3>${p.title}</h3><p>${p.description||''}</p>
+            <div class="stack">${stackHtml}</div>
+          </a>`;
+        }).join('');
+      }
+
+      if(skills && skills.length){
+        const row = document.querySelector('.pill-row');
+        row.innerHTML = skills.map(s=>`<span class="pill">${s.name}</span>`).join('');
+      }
+
+      if(timeline && timeline.length){
+        const exp = timeline.filter(t=>t.kind==='experience');
+        const edu = timeline.filter(t=>t.kind==='education');
+        const expCol = document.querySelectorAll('.exp-edu-col-head')[0]?.parentElement;
+        const eduCol = document.querySelectorAll('.exp-edu-col-head')[1]?.parentElement;
+        if(exp.length && expCol){
+          expCol.querySelectorAll('.t-item').forEach(el=>el.remove());
+          exp.forEach(t=>{
+            const a=document.createElement('a'); a.className='t-item'; a.href=t.link||'#';
+            a.innerHTML=`<div class="t-date">${t.date_label||''}</div><h4>${t.title}</h4><p>${t.description||''}</p>`;
+            expCol.appendChild(a);
+          });
+        }
+        if(edu.length && eduCol){
+          eduCol.querySelectorAll('.t-item').forEach(el=>el.remove());
+          edu.forEach(t=>{
+            const a=document.createElement('a'); a.className='t-item'; a.href=t.link||'#';
+            a.innerHTML=`<div class="t-date">${t.date_label||''}</div><h4>${t.title}</h4><p>${t.description||''}</p>`;
+            eduCol.appendChild(a);
+          });
+        }
+      }
+
+      if(contact){
+        const h2 = document.querySelector('.contact h2');
+        const p = document.querySelector('.contact p');
+        if(contact.heading && h2) h2.innerHTML = contact.heading.replace(/automating/i,'<em>automating</em>');
+        if(contact.subtext && p) p.textContent = contact.subtext;
+      }
+    }catch(err){ /* silently keep static content if Supabase not ready yet */ }
+  }
+  loadDynamicContent();
+
   document.getElementById('query-form').addEventListener('submit', async (e)=>{
     e.preventDefault();
     const btn = document.getElementById('q-submit');

@@ -96,7 +96,15 @@
   .slug-row span{background:#f6f6fa; padding:11px 12px; font-size:12.5px; color:#65656f; white-space:nowrap;}
   .slug-row input{border:none; border-radius:0; margin-bottom:0;}
   #editor{background:#fff; min-height:320px; border-radius:0 0 10px 10px;}
-  .ql-toolbar{border-radius:10px 10px 0 0;}
+  #toolbar{border-radius:10px 10px 0 0;}
+  #insert-table-btn{
+    font-size:13px; padding:0 8px; border:none; background:none; cursor:pointer; color:#444;
+  }
+  #insert-table-btn:hover{color:#2323ff;}
+  .ql-font-serif{font-family:Georgia,serif;}
+  .ql-font-monospace{font-family:'Courier New',monospace;}
+  .ql-editor table{border-collapse:collapse; width:100%;}
+  .ql-editor table td{border:1px solid #ccc; padding:8px;}
   .cover-drop{border:1.5px dashed #e6e6ec; border-radius:12px; padding:16px; text-align:center; cursor:pointer; margin-bottom:10px;}
   .cover-drop:hover{border-color:#2323ff;}
   .cover-preview{width:100%; border-radius:10px; margin-top:10px; display:none; max-height:160px; object-fit:cover;}
@@ -140,6 +148,7 @@
       <div class="nav-item active" data-view="dashboard"><span class="dot"></span> Dashboard</div>
       <div class="nav-item" data-view="blogs"><span class="dot"></span> Blogs</div>
       <div class="nav-item" data-view="enquiries"><span class="dot"></span> Contact Enquiries</div>
+      <div class="nav-item" data-view="content"><span class="dot"></span> Website Content</div>
       <div class="nav-item" data-view="profile"><span class="dot"></span> Profile &amp; Security</div>
       <div class="sidebar-footer">
         <a href="../blog/index.html" target="_blank" style="font-size:13px; color:#9aa0c9; display:block; margin-bottom:10px;">View website ↗</a>
@@ -209,6 +218,42 @@
               <span class="field-lbl">URL Slug *</span>
               <div class="slug-row"><span>/blog/</span><input type="text" id="post-slug" placeholder="url-slug"></div>
               <span class="field-lbl">Content</span>
+              <div id="toolbar">
+                <select class="ql-font">
+                  <option selected>sans</option>
+                  <option value="serif">serif</option>
+                  <option value="monospace">monospace</option>
+                </select>
+                <select class="ql-size">
+                  <option value="small">Small</option>
+                  <option selected>Normal</option>
+                  <option value="large">Large</option>
+                  <option value="huge">Huge</option>
+                </select>
+                <select class="ql-header">
+                  <option value="1">Heading 1</option>
+                  <option value="2">Heading 2</option>
+                  <option value="3">Heading 3</option>
+                  <option selected>Paragraph</option>
+                </select>
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+                <button class="ql-strike"></button>
+                <select class="ql-color"></select>
+                <select class="ql-background"></select>
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+                <button class="ql-align" value=""></button>
+                <button class="ql-align" value="center"></button>
+                <button class="ql-align" value="right"></button>
+                <button class="ql-blockquote"></button>
+                <button class="ql-code-block"></button>
+                <button class="ql-link"></button>
+                <button class="ql-image"></button>
+                <button id="insert-table-btn" type="button" title="Insert table">⊞ Table</button>
+                <button class="ql-clean"></button>
+              </div>
               <div id="editor"></div>
             </div>
             <div class="card-box">
@@ -257,6 +302,102 @@
         <div id="enquiries-list"><p style="color:#9a9aa5;">Loading…</p></div>
       </div>
 
+      <!-- WEBSITE CONTENT -->
+      <div class="view" id="view-content">
+        <div class="view-head"><div><h1>Website Content</h1><p>Edit what shows on your homepage — Work, Skills, Experience, Education &amp; Contact</p></div></div>
+        <div class="filter-btns" style="margin-bottom:22px;">
+          <button class="active" data-sub="projects">Work / Projects</button>
+          <button data-sub="skills">Skills</button>
+          <button data-sub="experience">Experience</button>
+          <button data-sub="education">Education</button>
+          <button data-sub="contact">Contact Info</button>
+        </div>
+
+        <!-- Projects -->
+        <div class="sub-view active" id="sub-projects">
+          <button class="btn-dark" style="margin-bottom:16px;" onclick="openProjectForm()">+ Add Project</button>
+          <div id="projects-list"></div>
+        </div>
+
+        <!-- Skills -->
+        <div class="sub-view" id="sub-skills" style="display:none;">
+          <div class="card-box">
+            <span class="field-lbl">Add a skill</span>
+            <div style="display:flex; gap:10px;">
+              <input type="text" id="new-skill-input" placeholder="e.g. AI Agents" style="margin-bottom:0;">
+              <button class="btn-dark" onclick="addSkill()">Add</button>
+            </div>
+          </div>
+          <div class="tag-pills" id="skills-list" style="gap:10px;"></div>
+        </div>
+
+        <!-- Experience -->
+        <div class="sub-view" id="sub-experience" style="display:none;">
+          <button class="btn-dark" style="margin-bottom:16px;" onclick="openTimelineForm('experience')">+ Add Experience</button>
+          <div id="experience-list"></div>
+        </div>
+
+        <!-- Education -->
+        <div class="sub-view" id="sub-education" style="display:none;">
+          <button class="btn-dark" style="margin-bottom:16px;" onclick="openTimelineForm('education')">+ Add Education</button>
+          <div id="education-list"></div>
+        </div>
+
+        <!-- Contact -->
+        <div class="sub-view" id="sub-contact" style="display:none;">
+          <div class="card-box" style="max-width:520px;">
+            <span class="field-lbl">Heading</span>
+            <input type="text" id="c-heading">
+            <span class="field-lbl">Subtext</span>
+            <textarea id="c-subtext" rows="3"></textarea>
+            <span class="field-lbl">Email</span>
+            <input type="text" id="c-email">
+            <span class="field-lbl">WhatsApp number (with country code)</span>
+            <input type="text" id="c-whatsapp">
+            <span class="field-lbl">LinkedIn URL</span>
+            <input type="text" id="c-linkedin">
+            <span class="field-lbl">GitHub URL</span>
+            <input type="text" id="c-github">
+            <button class="btn-dark" onclick="saveContact()">Save Contact Info</button>
+            <div id="contact-status" style="font-size:13px; margin-top:10px; color:#65656f;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECT FORM MODAL -->
+      <div id="project-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:100; align-items:center; justify-content:center;">
+        <div class="card-box" style="width:480px; max-width:92vw; max-height:88vh; overflow-y:auto;">
+          <h3 id="pm-heading" style="margin-bottom:16px; font-size:18px; font-weight:800;">Add Project</h3>
+          <span class="field-lbl">Title</span><input type="text" id="pm-title">
+          <span class="field-lbl">Description</span><textarea id="pm-desc" rows="3"></textarea>
+          <span class="field-lbl">Tag (e.g. GST, Audit)</span><input type="text" id="pm-tag">
+          <span class="field-lbl">Stack (comma separated)</span><input type="text" id="pm-stack">
+          <span class="field-lbl">Link (e.g. pages/project-x.html)</span><input type="text" id="pm-link">
+          <label style="display:flex; align-items:center; gap:8px; margin-bottom:16px; font-size:13.5px;">
+            <input type="checkbox" id="pm-featured" style="width:auto; margin:0;"> Featured (large card)
+          </label>
+          <div style="display:flex; gap:10px;">
+            <button class="btn-outline" onclick="closeProjectForm()">Cancel</button>
+            <button class="btn-dark" onclick="saveProject()">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIMELINE FORM MODAL -->
+      <div id="timeline-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:100; align-items:center; justify-content:center;">
+        <div class="card-box" style="width:480px; max-width:92vw; max-height:88vh; overflow-y:auto;">
+          <h3 id="tm-heading" style="margin-bottom:16px; font-size:18px; font-weight:800;">Add Entry</h3>
+          <span class="field-lbl">Title</span><input type="text" id="tm-title">
+          <span class="field-lbl">Date label (e.g. Nov 2025 — Present)</span><input type="text" id="tm-date">
+          <span class="field-lbl">Description</span><textarea id="tm-desc" rows="3"></textarea>
+          <span class="field-lbl">Link (optional, e.g. pages/exp-x.html)</span><input type="text" id="tm-link">
+          <div style="display:flex; gap:10px;">
+            <button class="btn-outline" onclick="closeTimelineForm()">Cancel</button>
+            <button class="btn-dark" onclick="saveTimeline()">Save</button>
+          </div>
+        </div>
+      </div>
+
       <!-- PROFILE -->
       <div class="view" id="view-profile">
         <div class="view-head"><div><h1>Profile &amp; Security</h1><p>Update your login password</p></div></div>
@@ -276,7 +417,31 @@
 <script src="../assets/js/supabase-config.js"></script>
 <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 <script>
-  const quill = new Quill('#editor', { theme: 'snow', placeholder: 'Write your post…' });
+  const Font = Quill.import('formats/font');
+  Font.whitelist = ['sans','serif','monospace'];
+  Quill.register(Font, true);
+
+  const quill = new Quill('#editor', {
+    theme: 'snow',
+    placeholder: 'Write your post…',
+    modules: { toolbar: '#toolbar' }
+  });
+
+  document.getElementById('insert-table-btn').addEventListener('click', () => {
+    const rows = parseInt(prompt('Number of rows?', '3'), 10) || 3;
+    const cols = parseInt(prompt('Number of columns?', '3'), 10) || 3;
+    let html = '<table style="border-collapse:collapse;width:100%;margin:12px 0;">';
+    for (let r = 0; r < rows; r++) {
+      html += '<tr>';
+      for (let c = 0; c < cols; c++) {
+        html += `<td style="border:1px solid #ccc;padding:8px;min-width:60px;">${r===0?'Header':'&nbsp;'}</td>`;
+      }
+      html += '</tr>';
+    }
+    html += '</table><p><br></p>';
+    const range = quill.getSelection(true);
+    quill.clipboard.dangerouslyPasteHTML(range ? range.index : quill.getLength(), html);
+  });
   let editingId = null, coverFile = null, tags = [];
   let allPosts = [], allEnquiries = [];
 
@@ -540,6 +705,168 @@
     await sb.from('enquiries').delete().eq('id', id);
     loadEnquiries(); loadDashboard();
   };
+
+  // ---- Website Content: sub-tabs ----
+  document.querySelectorAll('.filter-btns button[data-sub]').forEach(btn=>{
+    btn.onclick=()=>{
+      document.querySelectorAll('.filter-btns button[data-sub]').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.sub-view').forEach(v=>v.style.display='none');
+      document.getElementById('sub-'+btn.dataset.sub).style.display='block';
+      if(btn.dataset.sub==='projects') loadProjects();
+      if(btn.dataset.sub==='skills') loadSkills();
+      if(btn.dataset.sub==='experience') loadTimeline('experience');
+      if(btn.dataset.sub==='education') loadTimeline('education');
+      if(btn.dataset.sub==='contact') loadContact();
+    };
+  });
+
+  // ---- Projects ----
+  let editingProjectId = null;
+  async function loadProjects(){
+    const { data, error } = await sb.from('site_projects').select('*').order('order_num');
+    const list = document.getElementById('projects-list');
+    if(error){ list.innerHTML = `<p style="color:#e33;">${error.message}</p>`; return; }
+    if(!data.length){ list.innerHTML = '<p style="color:#9a9aa5;">No projects yet — click "Add Project".</p>'; return; }
+    list.innerHTML = data.map(p=>`
+      <div class="enq-row">
+        <div><b>${p.title} ${p.featured?'⭐':''}</b><div class="meta">${p.tag||''} · ${p.stack||''}</div></div>
+        <div class="enq-actions">
+          <button style="border:1px solid #e6e6ec;border-radius:7px;padding:6px 10px;background:#fff;cursor:pointer;" onclick='openProjectForm(${JSON.stringify(p)})'>Edit</button>
+          <button style="border:1px solid #e6e6ec;border-radius:7px;padding:6px 10px;background:#fff;cursor:pointer;" onclick="deleteProject('${p.id}')">Delete</button>
+        </div>
+      </div>`).join('');
+  }
+  window.openProjectForm = function(p){
+    editingProjectId = p ? p.id : null;
+    document.getElementById('pm-heading').textContent = p ? 'Edit Project' : 'Add Project';
+    document.getElementById('pm-title').value = p ? p.title : '';
+    document.getElementById('pm-desc').value = p ? p.description : '';
+    document.getElementById('pm-tag').value = p ? p.tag : '';
+    document.getElementById('pm-stack').value = p ? p.stack : '';
+    document.getElementById('pm-link').value = p ? p.link : '';
+    document.getElementById('pm-featured').checked = p ? p.featured : false;
+    document.getElementById('project-modal').style.display='flex';
+  };
+  window.closeProjectForm = function(){ document.getElementById('project-modal').style.display='none'; };
+  window.saveProject = async function(){
+    const data = {
+      title: document.getElementById('pm-title').value.trim(),
+      description: document.getElementById('pm-desc').value.trim(),
+      tag: document.getElementById('pm-tag').value.trim(),
+      stack: document.getElementById('pm-stack').value.trim(),
+      link: document.getElementById('pm-link').value.trim(),
+      featured: document.getElementById('pm-featured').checked
+    };
+    if(!data.title) return alert('Title required');
+    if(editingProjectId){
+      await sb.from('site_projects').update(data).eq('id', editingProjectId);
+    } else {
+      await sb.from('site_projects').insert(data);
+    }
+    closeProjectForm(); loadProjects();
+  };
+  window.deleteProject = async function(id){
+    if(!confirm('Delete this project?')) return;
+    await sb.from('site_projects').delete().eq('id', id);
+    loadProjects();
+  };
+
+  // ---- Skills ----
+  async function loadSkills(){
+    const { data, error } = await sb.from('site_skills').select('*').order('order_num');
+    const list = document.getElementById('skills-list');
+    if(error){ list.innerHTML = `<p style="color:#e33;">${error.message}</p>`; return; }
+    list.innerHTML = data.map(s=>`<span class="tag-pill">${s.name}<button onclick="deleteSkill('${s.id}')">×</button></span>`).join('');
+  }
+  window.addSkill = async function(){
+    const input = document.getElementById('new-skill-input');
+    const name = input.value.trim();
+    if(!name) return;
+    await sb.from('site_skills').insert({ name, order_num: 99 });
+    input.value=''; loadSkills();
+  };
+  window.deleteSkill = async function(id){
+    await sb.from('site_skills').delete().eq('id', id);
+    loadSkills();
+  };
+
+  // ---- Timeline (Experience / Education) ----
+  let editingTimelineId = null, timelineKind = 'experience';
+  async function loadTimeline(kind){
+    const { data, error } = await sb.from('site_timeline').select('*').eq('kind', kind).order('order_num');
+    const list = document.getElementById(kind+'-list');
+    if(error){ list.innerHTML = `<p style="color:#e33;">${error.message}</p>`; return; }
+    if(!data.length){ list.innerHTML = `<p style="color:#9a9aa5;">No entries yet.</p>`; return; }
+    list.innerHTML = data.map(t=>`
+      <div class="enq-row">
+        <div><b>${t.title}</b><div class="meta">${t.date_label||''}</div><div class="msg">${t.description||''}</div></div>
+        <div class="enq-actions">
+          <button style="border:1px solid #e6e6ec;border-radius:7px;padding:6px 10px;background:#fff;cursor:pointer;" onclick='openTimelineForm("${kind}", ${JSON.stringify(t)})'>Edit</button>
+          <button style="border:1px solid #e6e6ec;border-radius:7px;padding:6px 10px;background:#fff;cursor:pointer;" onclick="deleteTimeline('${t.id}','${kind}')">Delete</button>
+        </div>
+      </div>`).join('');
+  }
+  window.openTimelineForm = function(kind, t){
+    timelineKind = kind;
+    editingTimelineId = t ? t.id : null;
+    document.getElementById('tm-heading').textContent = (t?'Edit ':'Add ') + (kind==='experience'?'Experience':'Education');
+    document.getElementById('tm-title').value = t ? t.title : '';
+    document.getElementById('tm-date').value = t ? t.date_label : '';
+    document.getElementById('tm-desc').value = t ? t.description : '';
+    document.getElementById('tm-link').value = t ? t.link : '';
+    document.getElementById('timeline-modal').style.display='flex';
+  };
+  window.closeTimelineForm = function(){ document.getElementById('timeline-modal').style.display='none'; };
+  window.saveTimeline = async function(){
+    const data = {
+      kind: timelineKind,
+      title: document.getElementById('tm-title').value.trim(),
+      date_label: document.getElementById('tm-date').value.trim(),
+      description: document.getElementById('tm-desc').value.trim(),
+      link: document.getElementById('tm-link').value.trim()
+    };
+    if(!data.title) return alert('Title required');
+    if(editingTimelineId){
+      await sb.from('site_timeline').update(data).eq('id', editingTimelineId);
+    } else {
+      await sb.from('site_timeline').insert(data);
+    }
+    closeTimelineForm(); loadTimeline(timelineKind);
+  };
+  window.deleteTimeline = async function(id, kind){
+    if(!confirm('Delete this entry?')) return;
+    await sb.from('site_timeline').delete().eq('id', id);
+    loadTimeline(kind);
+  };
+
+  // ---- Contact info ----
+  async function loadContact(){
+    const { data } = await sb.from('site_contact').select('*').eq('id',1).single();
+    if(!data) return;
+    document.getElementById('c-heading').value = data.heading||'';
+    document.getElementById('c-subtext').value = data.subtext||'';
+    document.getElementById('c-email').value = data.email||'';
+    document.getElementById('c-whatsapp').value = data.whatsapp ? data.whatsapp.replace('https://wa.me/','') : '';
+    document.getElementById('c-linkedin').value = data.linkedin||'';
+    document.getElementById('c-github').value = data.github||'';
+  }
+  window.saveContact = async function(){
+    const wa = document.getElementById('c-whatsapp').value.trim();
+    const data = {
+      heading: document.getElementById('c-heading').value.trim(),
+      subtext: document.getElementById('c-subtext').value.trim(),
+      email: document.getElementById('c-email').value.trim(),
+      whatsapp: wa.startsWith('http') ? wa : 'https://wa.me/'+wa.replace(/\D/g,''),
+      linkedin: document.getElementById('c-linkedin').value.trim(),
+      github: document.getElementById('c-github').value.trim()
+    };
+    const { error } = await sb.from('site_contact').update(data).eq('id',1);
+    document.getElementById('contact-status').textContent = error ? 'Error: '+error.message : 'Saved ✓';
+  };
+
+  // load first sub-tab when Website Content nav opened
+  document.querySelector('.nav-item[data-view="content"]').addEventListener('click', loadProjects);
 
   // ---- Profile / password ----
   document.getElementById('update-pw-btn').onclick = async ()=>{
